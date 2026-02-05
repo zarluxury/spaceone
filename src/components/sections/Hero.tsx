@@ -53,7 +53,7 @@ export default function Hero() {
 
         if (timeout) clearTimeout(timeout);
 
-        el.scrollTop += e.deltaY * 0.5;
+        el.scrollTop += e.deltaY * 0.4;
 
         timeout = setTimeout(() => {
           isUserScrolling = false;

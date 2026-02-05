@@ -5,6 +5,8 @@ import { FiUser } from "react-icons/fi";
 import Image from 'next/image';
 import logo from '../../../public/data/logo.png';
 import { CiUser } from "react-icons/ci";
+import Link from 'next/link';
+
 
 const Navbar = () => {
   return (
@@ -17,15 +19,23 @@ const Navbar = () => {
         <li className="cursor-pointer hover:opacity-70 transition-opacity">
           <RxHamburgerMenu className="text-2xl" />
         </li>
-        <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Products</li>
-        <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Projects</li>
-        <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Metarioteca</li>
+        <Link href="/products">
+          <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Products</li>
+        </Link>
+        <Link href="/projects">
+          <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Projects</li>
+        </Link>
+        <Link href="/metarioteca">
+          <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Metarioteca</li>
+        </Link>
       </ul>
     </div>
 
     {/* Center: Logo */}
     <div className="flex justify-center items-center">
-      <Image src={logo} alt="logo" width={80} height={40} className="object-contain" />
+      <Link href="/">
+        <Image src={logo} alt="logo" width={80} height={40} className="object-contain" />
+      </Link>
     </div>
 
     {/* Right: Actions */}
