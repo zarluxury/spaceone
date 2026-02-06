@@ -1,11 +1,16 @@
 import React from 'react';
+import Link from 'next/link';
+import { Footer } from '../ui/Footer';
 
 interface Product {
   id: number;
   name: string;
+  slug: string;
   edition: string;
   isNew: boolean;
   image: string;
+  category: string;
+  subcategory: string;
 }
 
 interface ProductsProps {
@@ -34,71 +39,96 @@ const Products = (props: ProductsProps) => {
     products = [
       {
         id: 1,
-        name: 'Celato',
+        name: 'Alchemy',
+        slug: 'alchemy',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://csspicker.dev/api/image/?q=silver+modern+cabinet+minimalist&image_type=photo',
+        category: 'furniture',
+        subcategory: 'coffee-tables',
       },
       {
         id: 2,
         name: 'Elizabeth Console',
+        slug: 'elizabeth-console',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://csspicker.dev/api/image/?q=modern+silver+console+table&image_type=photo',
+        category: 'furniture',
+        subcategory: 'console',
       },
       {
         id: 3,
         name: 'Marea Cabinet',
+        slug: 'marea-cabinet',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://csspicker.dev/api/image/?q=silver+metal+minimalist+furniture&image_type=photo',
+        category: 'furniture',
+        subcategory: 'cabinets-and-sideboards',
       },
       {
         id: 4,
         name: 'Pandora',
+        slug: 'pandora',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://csspicker.dev/api/image/?q=silver+cylinder+furniture+sculpture&image_type=photo',
+        category: 'furniture',
+        subcategory: 'dividers',
       },
       {
         id: 5,
         name: 'Celato',
+        slug: 'celato',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://csspicker.dev/api/image/?q=silver+modern+cabinet+minimalist&image_type=photo',
+        category: 'furniture',
+        subcategory: 'cabinets-and-sideboards',
       },
       {
         id: 6,
         name: 'Elizabeth Console',
+        slug: 'elizabeth-console-2',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://csspicker.dev/api/image/?q=modern+silver+console+table&image_type=photo',
+        category: 'furniture',
+        subcategory: 'console',
       },
       {
         id: 7,
         name: 'Marea Cabinet',
+        slug: 'marea-cabinet-2',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://csspicker.dev/api/image/?q=silver+metal+minimalist+furniture&image_type=photo',
+        category: 'furniture',
+        subcategory: 'cabinets-and-sideboards',
       },
       {
         id: 8,
         name: 'Pandora',
+        slug: 'pandora-2',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://csspicker.dev/api/image/?q=silver+cylinder+furniture+sculpture&image_type=photo',
+        category: 'furniture',
+        subcategory: 'dividers',
       },
     ],
   } = props;
 
   return (
+    <>
     <div className="w-full bg-white font-sans text-[#333] px-6 py-12 lg:px-12 mt-30 ">
       {/* Header Navigation */}
       <div className="flex justify-center items-center gap-12 mb-8 font-gramatika">
         {categories.map((cat, idx) => (
           <button
             key={cat}
-            className={`text-3xl md:text-5xl font-light tracking-tight transition-colors duration-300 tracking-wide cursor-pointer  ${
+            className={`text-3xl md:text-5xl lg:text-6xl py-2 font-light tracking-tight transition-colors duration-300 tracking-wide cursor-pointer  ${
               idx === 0 ? 'text-[#1a1a1a]' : 'text-[#b0b0b0] hover:text-[#666]'
             }`}
           >
@@ -124,7 +154,7 @@ const Products = (props: ProductsProps) => {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-[1600px] mx-auto">
         {products.map((product) => (
-          <div key={product.id} className="group cursor-pointer">
+          <Link key={product.id} href={`/productview/${product.slug}`} className="group cursor-pointer">
             <div className="aspect-[4/5] overflow-hidden bg-[#f5f5f5] mb-4">
               <img
                 src={product.image}
@@ -141,10 +171,12 @@ const Products = (props: ProductsProps) => {
                 </span>
               )}
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

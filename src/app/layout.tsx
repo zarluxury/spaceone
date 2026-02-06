@@ -27,10 +27,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={gramatika.variable}
-      >
-       <SmoothScroll>
+      <body className={gramatika.variable}>
+        <SmoothScroll>
         <Navbar />  
         {children}
         </SmoothScroll>

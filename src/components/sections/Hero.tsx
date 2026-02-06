@@ -14,79 +14,79 @@ export default function Hero() {
   const col2 = useRef<HTMLDivElement>(null);
   const col3 = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+  // useEffect(() => {
+  //   const checkMobile = () => {
+  //     setIsMobile(window.innerWidth < 768);
+  //   };
     
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+  //   checkMobile();
+  //   window.addEventListener('resize', checkMobile);
     
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  //   return () => window.removeEventListener('resize', checkMobile);
+  // }, []);
 
-  useEffect(() => {
-    const columns = isMobile 
-      ? [
-          { ref: col1, speed: 1.2, direction: 1 },
-          { ref: col2, speed: 1.5, direction: -1 },
-        ]
-      : [
-          { ref: col1, speed: 1, direction: 1 },
-          { ref: col2, speed: 1.3, direction: -1 },
-          { ref: col3, speed: 1, direction: 1 },
-        ];
+  // useEffect(() => {
+  //   const columns = isMobile 
+  //     ? [
+  //         { ref: col1, speed: 1.2, direction: 1 },
+  //         { ref: col2, speed: 1.5, direction: -1 },
+  //       ]
+  //     : [
+  //         { ref: col1, speed: 1, direction: 1 },
+  //         { ref: col2, speed: 1.3, direction: -1 },
+  //         { ref: col3, speed: 1, direction: 1 },
+  //       ];
 
-    const cleanups: (() => void)[] = [];
+  //   const cleanups: (() => void)[] = [];
 
-    columns.forEach(({ ref, speed, direction }) => {
-      if (!ref.current) return;
+  //   columns.forEach(({ ref, speed, direction }) => {
+  //     if (!ref.current) return;
 
-      const el = ref.current;
+  //     const el = ref.current;
 
-      let isUserScrolling = false;
-      let timeout: NodeJS.Timeout | null = null;
+  //     let isUserScrolling = false;
+  //     let timeout: NodeJS.Timeout | null = null;
 
-      /* wheel */
-      const onWheel = (e: WheelEvent) => {
-        isUserScrolling = true;
+  //     /* wheel */
+  //     const onWheel = (e: WheelEvent) => {
+  //       isUserScrolling = true;
 
-        if (timeout) clearTimeout(timeout);
+  //       if (timeout) clearTimeout(timeout);
 
-        el.scrollTop += e.deltaY * 0.4;
+  //       el.scrollTop += e.deltaY * 0.4;
 
-        timeout = setTimeout(() => {
-          isUserScrolling = false;
-        }, 500);
-      };
+  //       timeout = setTimeout(() => {
+  //         isUserScrolling = false;
+  //       }, 500);
+  //     };
 
-      el.addEventListener("wheel", onWheel, { passive: true });
+  //     el.addEventListener("wheel", onWheel, { passive: true });
 
-      /* auto scroll */
-      const half = el.scrollHeight / 2;
+  //     /* auto scroll */
+  //     const half = el.scrollHeight / 2;
 
-      const auto = () => {
-        if (isUserScrolling) return;
+  //     const auto = () => {
+  //       if (isUserScrolling) return;
 
-        let pos = el.scrollTop + speed * direction;
+  //       let pos = el.scrollTop + speed * direction;
 
-        if (direction > 0 && pos >= half) pos = 0;
-        if (direction < 0 && pos <= 0) pos = half;
+  //       if (direction > 0 && pos >= half) pos = 0;
+  //       if (direction < 0 && pos <= 0) pos = half;
 
-        el.scrollTop = pos;
-      };
+  //       el.scrollTop = pos;
+  //     };
 
-      gsap.ticker.add(auto);
+  //     gsap.ticker.add(auto);
 
-      cleanups.push(() => {
-        el.removeEventListener("wheel", onWheel);
-        gsap.ticker.remove(auto);
-        if (timeout) clearTimeout(timeout);
-      });
-    });
+  //     cleanups.push(() => {
+  //       el.removeEventListener("wheel", onWheel);
+  //       gsap.ticker.remove(auto);
+  //       if (timeout) clearTimeout(timeout);
+  //     });
+  //   });
 
-    return () => cleanups.forEach((fn) => fn());
-  }, [isMobile]);
+  //   return () => cleanups.forEach((fn) => fn());
+  // }, [isMobile]);
 
   const items = [
     { type: "image", src: hero1 },
