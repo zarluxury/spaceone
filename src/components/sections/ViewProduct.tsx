@@ -10,7 +10,7 @@ const ViewProduct = () => {
   const [selectedColor, setSelectedColor] = useState(0)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [openSection, setOpenSection] = useState("finishes")
+  const [openSection, setOpenSection] = useState("")
 
 
   
@@ -50,7 +50,6 @@ const ViewProduct = () => {
     'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60'
   ]
 
   const nextSlide = () => {
@@ -76,17 +75,17 @@ const ViewProduct = () => {
       </div>
 
       {/* Product Info Section */}
-      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-15 py-16 md:py-24">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-15 py-16 md:py-15">
         {/* Product Name */}
-        <h1 className="text-1xl text-gray-800 md:text-2xl lg:text-3xl font-[10] mb-10 tracking-tight font-gramatika ">
+        <h1 className="text-1xl text-gray-900 md:text-2xl lg:text-4xl mb-8 tracking-tight font-gramatika font-[300] ">
           Celato | Iridium Edition
         </h1>
 
         {/* Description in two columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-2 mb-36">
+        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10 lg:gap-0 mb-36">
 
   {/* DESCRIPTION */}
-  <div className="max-w-5xl space-y-0 font-gramatika tracking-normal leading-5">
+  <div className="max-w-5xl space-y-0 font-gramatika tracking-wide leading-5">
     <p className="text-[19px] text-gray-700 ">
       Celato is a reference to what is concealed to keep a memory intact; it’s an archetype in which beauty is revealed in stages. A monolithic appearance makes Celato a contemporary menhir; like a legend that tells of magnificent treasures safeguarded below sacred stones, Celato reveals its dual soul, with many internal, hidden, almost secret spaces. It combines several tesserae to form a whole: aesthetics, function and an incredible ability to make a unique piece of design, a combination of tradition and modernity.
     </p>
@@ -260,27 +259,31 @@ const ViewProduct = () => {
 
 
         {/* Affinities with this product */}
-        <div className="mb-24">
-          <h2 className="text-2xl font-light my-30">Affinities with this product</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {affinityImages.map((src, index) => (
-              <div key={index} className="group">
-                <div className="relative aspect-square overflow-hidden rounded-lg mb-4">
-                  <Image
-                    src={src}
-                    alt={`Affinity product ${index + 1}`}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <h3 className="text-base font-normal text-gray-800 mb-1">
-                  Complementary Product {index + 1}
-                </h3>
-                <p className="text-sm text-gray-500">Perfect pairing with Celato</p>
-              </div>
-            ))}
-          </div>
-        </div>
+<div className="w-full min-h-screen flex flex-col">
+
+  <h2 className="text-4xl font-gramatika font-[100] text-center py-16">
+    Affinities with this product
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[70vh]">
+    {affinityImages.map((src, index) => (
+      <div key={index} className="relative w-full h-full overflow-hidden group">
+        <Image
+          src={src}
+          alt={`Affinity ${index + 1}`}
+          fill
+          priority
+          className="
+            object-cover
+            transition-transform duration-700
+            group-hover:scale-105
+          "
+        />
+      </div>
+    ))}
+  </div>
+</div>
+
 
       </div>
     </div>

@@ -17,6 +17,7 @@ import {
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -32,7 +33,7 @@ const Navbar = () => {
         
         {/* Left: Navigation Links & Hamburger */}
         <div className="flex items-center">
-          <ul className="flex items-center gap-6 text-[15px] font-gramatika -tracking-tighter">
+          <ul className="flex items-center gap-6 text-[15px] font-gramatika font-[100] -tracking-tighter">
             <li className="cursor-pointer hover:opacity-70 transition-opacity" onClick={toggleMenu}>
               {isMenuOpen ? <RxCross2 className="text-2xl" /> : <RxHamburgerMenu className="text-2xl" />}
             </li>
@@ -61,9 +62,13 @@ const Navbar = () => {
             <li className="cursor-pointer p-2 hover:bg-white/10 rounded-full transition-colors">
               <CiSearch className="text-2xl" />
             </li>
-            <li className="cursor-pointer p-2 hover:bg-white/10 rounded-full transition-colors">
-              <CiUser className="text-2xl" />
-            </li>
+            <li
+  onClick={() => setIsLoginOpen(true)}
+  className="cursor-pointer p-2 hover:bg-white/10 rounded-full transition-colors"
+>
+  <CiUser className="text-2xl" />
+</li>
+
           </ul>
         </div>
       </div>
@@ -308,6 +313,74 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      {/* Login Modal */}
+<div
+  className={`
+    fixed inset-0 z-[200] flex items-center justify-center
+    bg-black/60 backdrop-blur-md
+    transition-all duration-300
+    ${isLoginOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+  `}
+  onClick={() => setIsLoginOpen(false)}
+>
+  {/* Card */}
+  <div
+    onClick={(e) => e.stopPropagation()}
+    className={`
+      bg-white w-[420px] max-w-[92%]
+      px-10 py-8
+      shadow-2xl
+      transition-all duration-300
+      ${isLoginOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}
+    `}
+  >
+    {/* Header */}
+    <div className="flex justify-between items-center mb-6">
+      <h3 className="text-lg font-gramatika font-[100]">Reserved area</h3>
+
+      <button onClick={() => setIsLoginOpen(false)}>
+        <RxCross2 className="text-xl hover:opacity-60" />
+      </button>
+    </div>
+
+    {/* Form */}
+    <form className="flex flex-col gap-5">
+      <input
+        type="email"
+        placeholder="Email"
+        className="border-b border-neutral-400 focus:outline-none py-2 text-sm"
+      />
+
+      <input
+        type="password"
+        placeholder="Password"
+        className="border-b border-neutral-400 focus:outline-none py-2 text-sm"
+      />
+
+      <p className="text-xs text-neutral-400 cursor-pointer hover:underline">
+        Have you lost your password?
+      </p>
+
+      {/* Buttons */}
+      <div className="flex gap-4 mt-4">
+        <button
+          type="submit"
+          className="flex-1 border border-black rounded-full py-2 text-sm hover:bg-black hover:text-white transition"
+        >
+          LOG IN
+        </button>
+
+        <button
+          type="button"
+          className="flex-1 border border-black rounded-full py-2 text-sm hover:bg-black hover:text-white transition"
+        >
+          REGISTER →
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
     </nav>
   )
 }
