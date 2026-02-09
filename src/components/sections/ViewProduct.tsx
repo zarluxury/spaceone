@@ -2,6 +2,26 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { CiCirclePlus } from "react-icons/ci";
+import hero1 from "../../../public/images/product/hero/Gemini_Generated_Image_pjaid6pjaid6pjai.png"
+import slider1 from "../../../public/images/product/slider/1.png"
+import slider2 from "../../../public/images/product/slider/2.png"
+import slider3 from "../../../public/images/product/slider/3.png"
+
+import classicDove from "../../../public/images/product/Classic/dove-01.jpg"
+import classicVerona from "../../../public/images/product/Classic/verona-02.jpg"
+import classicCamelcoat from "../../../public/images/product/Classic/camelcoat-03.jpg"
+
+
+import plateDove from "../../../public/images/product/Plate/dove-01.jpg"
+import plateVerona from "../../../public/images/product/Plate/verona-02.jpg"
+import plateCamelcoat from "../../../public/images/product/Plate/camelcoat-03.jpg"
+
+import weaveDove from "../../../public/images/product/Weave/dove-01.jpg"
+import weaveVerona from "../../../public/images/product/Weave/verona-02.jpg"
+import weaveCamelcoat from "../../../public/images/product/Weave/camelcoat-03.jpg"
+
+
+
 
 import { Footer } from '../ui/Footer'
 
@@ -11,6 +31,7 @@ const ViewProduct = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [openSection, setOpenSection] = useState("")
+  const [activeColorCategory, setActiveColorCategory] = useState("classic")
 
 
   
@@ -23,27 +44,37 @@ const ViewProduct = () => {
   }
 
   // Online image URLs for slider
-  const sliderImages = [
-    'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80',
-    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80',
-    'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80',
-    'https://images.unsplash.com/photo-1540574163026-643ea20ade25?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80'
-  ]
+  const sliderImages = [slider1, slider2, slider3]
 
   const colors = [
-    { id: 0, name: "Iridium Stainless steel #0", code: "#E5E7EB" },
-    { id: 1, name: "Gold Stainless steel #1", code: "#FBBF24" },
-    { id: 2, name: "Copper Stainless steel #2", code: "#B45309" },
-    { id: 3, name: "Bronze Stainless steel #3", code: "#92400E" }
+    { id: 4, name: "Classic Dove", code: "#F8F9FA", category: "classic" },
+    { id: 5, name: "Classic Verona", code: "#FFFFF0", category: "classic" },
+    { id: 6, name: "Classic Sand", code: "#F4E4C1", category: "classic" },
+    { id: 7, name: "Plate Dove", code: "#C0C0C0", category: "plate" },
+    { id: 8, name: "Plate Verona", code: "#CD7F32", category: "plate" },
+    { id: 9, name: "Plate Black", code: "#2C2C2C", category: "plate" },
+    { id: 10, name: "Weave Dove", code: "#D2B48C", category: "weave" },
+    { id: 11, name: "Weave Verona", code: "#36454F", category: "weave" },
+    { id: 12, name: "Weave Gold", code: "#FFD700", category: "weave" }
   ]
 
-  // Online URLs for color images
-  const colorImages = [
-    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80',
-    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=60',
-    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=40',
-    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=20'
-  ]
+const colorImages = [
+  // Classic
+  classicDove,
+  classicVerona,
+  classicCamelcoat,
+
+  // Plate
+  plateDove,
+  plateVerona,
+  plateCamelcoat,
+
+  // Weave
+  weaveDove,
+  weaveVerona,
+  weaveCamelcoat
+]
+
 
   // Online URLs for affinity products
   const affinityImages = [
@@ -66,7 +97,7 @@ const ViewProduct = () => {
       {/* Main Hero Image */}
       <div className='relative h-[100vh] w-full'>
         <Image 
-          src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+          src={hero1}
           alt='Product Hero Image'
           fill
           className='object-cover'
@@ -78,7 +109,7 @@ const ViewProduct = () => {
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-15 py-16 md:py-15">
         {/* Product Name */}
         <h1 className="text-1xl text-gray-900 md:text-2xl lg:text-4xl mb-8 tracking-tight font-gramatika font-[300] ">
-          Celato | Iridium Edition
+          Lithe | Iridium Edition
         </h1>
 
         {/* Description in two columns */}
@@ -87,10 +118,13 @@ const ViewProduct = () => {
   {/* DESCRIPTION */}
   <div className="max-w-5xl space-y-0 font-gramatika tracking-wide leading-5">
     <p className="text-[19px] text-gray-700 ">
-      Celato is a reference to what is concealed to keep a memory intact; it’s an archetype in which beauty is revealed in stages. A monolithic appearance makes Celato a contemporary menhir; like a legend that tells of magnificent treasures safeguarded below sacred stones, Celato reveals its dual soul, with many internal, hidden, almost secret spaces. It combines several tesserae to form a whole: aesthetics, function and an incredible ability to make a unique piece of design, a combination of tradition and modernity.
+      Imagine the luxurious look and feel of faux leather combined with the durability and affordability of laminate. Introducing our revolutionary leather laminate!
+      It has a realistic leather texture, stain resistance, water repellency and ease of manitenance.
+     
     </p>
     <p className="text-[19px] text-gray-700">
-      At Milan Design Week 2025, De Castelli presents Iridium Edition: a selection of the brand’s iconic furniture which fully expresses its aesthetic. The unique cobalt blue lacquer on the inside combined with the new DeIridium finish transforms each piece into a presence with intense, vibrant character.
+       We offer the look and feel of real leather without the associate high cost and maintenance.
+      With a wide range of 45 varieties, it is poppularly used in wardrobe internals, wall paneling. shutters etc.
     </p>
   </div>
 
@@ -99,7 +133,7 @@ const ViewProduct = () => {
   <div className="flex items-start lg:justify-center font-gramatika">
     <p className="text-[16px] text-gray-900 uppercase tracking-wider">
       <span className="text-[12px] relative -top-2 mr-2 text-gray-600">DESIGN</span>
-      R&D De Castelli
+      R&D SpaceOne
     </p>
   </div>
 
@@ -167,7 +201,7 @@ const ViewProduct = () => {
 
 
 {/* ===== FULL SCREEN METAL DETAILS SECTION ===== */}
-<div className="min-h-auto bg-white px-8 md:px-16 lg:px-18 font-gramatika">
+<div className="min-h-auto bg-white px-8 md:px-16 lg:px-15 font-gramatika">
 
   {[
     { id: "finishes", title: "Metal finishes" },
@@ -201,7 +235,7 @@ const ViewProduct = () => {
       <div
         className={`overflow-hidden transition-all duration-700 ${
           openSection === section.id
-            ? "max-h-[1200px] opacity-100 pb-16"
+            ? "max-h-[1200px] opacity-100 pb-4"
             : "max-h-0 opacity-0"
         }`}
       >
@@ -209,22 +243,94 @@ const ViewProduct = () => {
         {/* FINISHES GRID */}
         {section.id === "finishes" && (
           <>
-            <p className="text-gray-400 mb-10">Stainless steel</p>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-16">
-              {colorImages.map((img, index) => (
-                <div key={index} className="group cursor-pointer">
-                  <div className="relative w-full aspect-square overflow-hidden">
-                    <Image
-                      src={img}
-                      alt=""
-                      fill
-                      className="object-cover group-hover:scale-105 transition duration-500"
-                    />
+            {/* Classic */}
+            <p 
+              className={`text-gray-500 mb-1 cursor-pointer hover:text-gray-600 transition-colors ${
+                activeColorCategory === 'classic' ? 'text-gray-900 font-semibold' : ''
+              }`}
+              onClick={() => setActiveColorCategory(activeColorCategory === 'classic' ? '' : 'classic')}
+            >
+              Classic {activeColorCategory === 'classic' ? '−' : '+'}
+            </p>
+            <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-16 mb-1 transition-all duration-500 ${
+              activeColorCategory === 'classic' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden mb-0'
+            }`}>
+              {colors.filter(color => color.category === 'classic').map((color, index) => {
+                const originalIndex = colors.findIndex(c => c.id === color.id);
+                return (
+                  <div key={color.id} className="group cursor-pointer">
+                    <div className="relative w-full aspect-square overflow-hidden">
+                      <Image
+                        src={colorImages[originalIndex]}
+                        alt=""
+                        fill
+                        className="object-cover group-hover:scale-105 transition duration-500"
+                      />
+                    </div>
+                    <p className="mt-3 text-sm">{color.name}</p>
                   </div>
-                  <p className="mt-3 text-sm">{colors[index].name}</p>
-                </div>
-              ))}
+                );
+              })}
+            </div>
+
+            {/* Plate */}
+            <p 
+              className={`text-gray-500 mb-1 cursor-pointer hover:text-gray-600 transition-colors ${
+                activeColorCategory === 'plate' ? 'text-gray-900 font-semibold' : ''
+              }`}
+              onClick={() => setActiveColorCategory(activeColorCategory === 'plate' ? '' : 'plate')}
+            >
+              Plate {activeColorCategory === 'plate' ? '−' : '+'}
+            </p>
+            <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-16 mb-1 transition-all duration-500 ${
+              activeColorCategory === 'plate' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden mb-0'
+            }`}>
+              {colors.filter(color => color.category === 'plate').map((color, index) => {
+                const originalIndex = colors.findIndex(c => c.id === color.id);
+                return (
+                  <div key={color.id} className="group cursor-pointer">
+                    <div className="relative w-full aspect-square overflow-hidden">
+                      <Image
+                        src={colorImages[originalIndex]}
+                        alt=""
+                        fill
+                        className="object-cover group-hover:scale-105 transition duration-500"
+                      />
+                    </div>
+                    <p className="mt-3 text-sm">{color.name}</p>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Weave */}
+            <p 
+              className={`text-gray-500 mb-1 cursor-pointer hover:text-gray-600 transition-colors ${
+                activeColorCategory === 'weave' ? 'text-gray-900 font-semibold' : ''
+              }`}
+              onClick={() => setActiveColorCategory(activeColorCategory === 'weave' ? '' : 'weave')}
+            >
+              Weave {activeColorCategory === 'weave' ? '−' : '+'}
+            </p>
+            <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 transition-all duration-500 ${
+              activeColorCategory === 'weave' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden'
+            }`}>
+              {colors.filter(color => color.category === 'weave').map((color, index) => {
+                const originalIndex = colors.findIndex(c => c.id === color.id);
+                return (
+                  <div key={color.id} className="group cursor-pointer">
+                    <div className="relative w-full aspect-square overflow-hidden">
+                      <Image
+                        src={colorImages[originalIndex]}
+                        alt=""
+                        fill
+                        className="object-cover group-hover:scale-105 transition duration-500"
+                      />
+                    </div>
+                    <p className="mt-3 text-sm">{color.name}</p>
+                  </div>
+                );
+              })}
             </div>
           </>
         )}
@@ -236,9 +342,54 @@ const ViewProduct = () => {
         )}
 
         {section.id === "dimensions" && (
-          <p className="text-gray-700 text-lg">
-            W.160 D.40 H.162 cm — Custom sizes available.
-          </p>
+          <div className="w-full flex justify-center items-center py-16">
+
+  <div className="w-[90%] sm:w-[60%] md:w-[40%] lg:w-[28%] ">
+
+    <svg
+      viewBox="0 0 200 200"
+      className="w-full h-auto"
+      fill="none"
+      stroke="#3b82f6"
+      strokeWidth="2"
+    >
+      {/* ===== BOX ===== */}
+      <rect x="40" y="40" width="120" height="120" fill='lightgray'/>
+
+      {/* ===== TOP WIDTH LINE ===== */}
+      <line x1="40" y1="25" x2="160" y2="25" />
+      <text
+        x="100"
+        y="18"
+        textAnchor="middle"
+        fontSize="12"
+        fill="#3b82f6"
+        stroke="none"
+      >
+        30
+      </text>
+
+      {/* ===== LEFT HEIGHT LINE ===== */}
+      <line x1="25" y1="40" x2="25" y2="160" />
+
+      <text
+        x="12"
+        y="105"
+        transform="rotate(-90 12 105)"
+        textAnchor="middle"
+        fontSize="12"
+        fill="#3b82f6"
+        stroke="none"
+      >
+        30
+      </text>
+    </svg>
+
+  </div>
+
+</div>
+
+
         )}
 
         {section.id === "downloads" && (

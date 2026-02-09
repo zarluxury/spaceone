@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Footer } from '../ui/Footer';
-
+import Image from 'next/image';
+import hero1 from "../../../public/images/hero/Gemini_Generated_Image_pjaid6pjaid6pjai.png"
 interface Product {
   id: number;
   name: string;
@@ -21,21 +22,7 @@ interface ProductsProps {
 
 const Products = (props: ProductsProps) => {
   const {
-    categories = ['Furniture', 'Surfaces', '(Un)Limited'],
-    subCategories = [
-      { name: 'Cabinets and Sideboards', count: 28 },
-      { name: 'Bookcases', count: 6 },
-      { name: 'Console', count: 6 },
-      { name: 'Tables', count: 10 },
-      { name: 'Seatings', count: 7 },
-      { name: 'Coffee tables', count: 10 },
-      { name: 'Dividers', count: 3 },
-      { name: 'Lighting', count: 10 },
-      { name: 'Mirrors', count: 5 },
-      { name: 'Frames', count: 10 },
-      { name: 'Pots', count: 13 },
-      { name: 'Landscape', count: 3 },
-    ],
+    categories = ['Surfaces'],
     products = [
       {
         id: 1,
@@ -43,7 +30,7 @@ const Products = (props: ProductsProps) => {
         slug: 'alchemy',
         edition: 'Iridium Edition',
         isNew: true,
-        image: 'https://media.istockphoto.com/id/1398692686/photo/kitchen-and-living-room-interior-in-new-farmhouse-style-luxury-home-with-open-concept-floor.jpg?s=2048x2048&w=is&k=20&c=dsM5Ak5khqVWru8zFmJdf_l2sVxywQHFeRjcYXgwbKM=',
+        image: hero1.src,
         category: 'furniture',
         subcategory: 'coffee-tables',
       },
@@ -122,33 +109,19 @@ const Products = (props: ProductsProps) => {
 
   return (
     <>
-    <div className="w-full bg-white font-sans text-[#333] px-6 py-12 lg:px-12 mt-30 ">
+    <div className="w-full bg-white font-sans text-[#333] px-6 py-20 lg:px-12 mt-2 ">
       {/* Header Navigation */}
-      <div className="flex justify-center items-center gap-12 mb-8 font-gramatika">
+      <div className="flex justify-center items-center gap-4 md:gap-8 lg:gap-12 lg:mb-12 font-gramatika">
         {categories.map((cat, idx) => (
           <button
             key={cat}
-            className={`text-3xl md:text-5xl lg:text-6xl py-2 font-light tracking-tight transition-colors duration-300 tracking-wide cursor-pointer  ${
+            className={`text-1xl md:text-3xl lg:text-6xl py-2 font-light tracking-tight transition-colors duration-300 tracking-wide cursor-pointer  ${
               idx === 0 ? 'text-[#1a1a1a]' : 'text-[#b0b0b0] hover:text-[#666]'
             }`}
           >
             {cat}
           </button>
         ))}
-      </div>
-
-      {/* Subcategories Filter */}
-      <div className="max-w-6xl mx-auto mb-22 mt-[6rem] px-4 font-gramatika">
-        <div className="flex flex-wrap justify-center gap-x-3 gap-y-1 text-[11px] md:text-xl  text-[#999] leading-relaxed text-center">
-          {subCategories.map((sub, index) => (
-            <React.Fragment key={sub.name}>
-              <span className="cursor-pointer hover:text-[#333] transition-colors">
-                {sub.name} <sup className="text-[8px] -top-1">{sub.count}</sup>
-              </span>
-              {index < subCategories.length - 1 && <span>, </span>}
-            </React.Fragment>
-          ))}
-        </div>
       </div>
 
       {/* Product Grid */}
