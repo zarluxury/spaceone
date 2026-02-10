@@ -40,12 +40,13 @@ const Navbar = () => {
             <Link href="/products">
               <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Products</li>
             </Link>
-            <Link href="/projects">
-              <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Projects</li>
+            <Link href="/archivements">
+              <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Archivements</li>
             </Link>
-            <Link href="/materioteca">
-              <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Materioteca</li>
+            <Link href="/downloads">
+              <li className="hidden md:block cursor-pointer hover:underline underline-offset-4">Downloads</li>
             </Link>
+            
           </ul>
         </div>
 
@@ -135,19 +136,20 @@ const Navbar = () => {
                     Products
                   </Link>
                   <Link
-                    href="/projects"
+                    href="/archivements"
                     onClick={closeMenu}
                     className="text-sm md:text-base font-medium hover:opacity-60 transition-opacity"
                   >
-                    Projects
+                    Archivements
                   </Link>
                   <Link
-                    href="/materioteca"
+                    href="/downloads"
                     onClick={closeMenu}
                     className="text-sm md:text-base font-medium hover:opacity-60 transition-opacity"
                   >
-                    Materioteca
+                    Downloads
                   </Link>
+                  
                   <Link
                     href="/cultura"
                     onClick={closeMenu}
@@ -361,22 +363,26 @@ const Navbar = () => {
         Have you lost your password?
       </p>
 
-      {/* Buttons */}
-      <div className="flex gap-4 mt-4">
-        <button
-          type="submit"
-          className="flex-1 border border-black rounded-full py-2 text-sm hover:bg-black hover:text-white transition"
-        >
-          LOG IN
-        </button>
+<div className="flex gap-4 mt-4">
 
-        <button
-          type="button"
-          className="flex-1 border border-black rounded-full py-2 text-sm hover:bg-black hover:text-white transition"
-        >
-          REGISTER →
-        </button>
-      </div>
+  <button
+    type="submit"
+    className="flex-1 border border-black rounded-full py-2 text-sm hover:bg-black hover:text-white transition"
+  >
+    LOG IN
+  </button>
+
+  <Link
+    href="/register"
+    className="flex-1 border border-black rounded-full py-2 text-sm text-center hover:bg-black hover:text-white transition"
+    onClick={() => setIsLoginOpen(false)}
+  >
+    REGISTER →
+
+  </Link>
+
+</div>
+
     </form>
   </div>
 </div>

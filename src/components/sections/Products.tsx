@@ -2,7 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import { Footer } from '../ui/Footer';
 import Image from 'next/image';
-import hero1 from "../../../public/images/hero/Gemini_Generated_Image_pjaid6pjaid6pjai.png"
+import hero1 from "../../../public/images/product/hero/hero.png"
+
+
 interface Product {
   id: number;
   name: string;
@@ -26,9 +28,9 @@ const Products = (props: ProductsProps) => {
     products = [
       {
         id: 1,
-        name: 'Alchemy',
-        slug: 'alchemy',
-        edition: 'Iridium Edition',
+        name: 'Lithe',
+        slug: 'lithe-veneer-edition',
+        edition: 'Veneer Edition',
         isNew: true,
         image: hero1.src,
         category: 'furniture',
@@ -67,7 +69,7 @@ const Products = (props: ProductsProps) => {
       {
         id: 5,
         name: 'Celato',
-        slug: 'celato',
+        slug: 'celato-iridium-edition',
         edition: 'Iridium Edition',
         isNew: true,
         image: 'https://media.istockphoto.com/id/1398692686/photo/kitchen-and-living-room-interior-in-new-farmhouse-style-luxury-home-with-open-concept-floor.jpg?s=2048x2048&w=is&k=20&c=dsM5Ak5khqVWru8zFmJdf_l2sVxywQHFeRjcYXgwbKM=',
@@ -135,7 +137,7 @@ const Products = (props: ProductsProps) => {
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
             </div>
-            <div className="flex items-baseline gap-1 text-[13px] text-[#333] font-gramatika">
+            <div className="flex items-baseline gap-1 text-[15px] text-[#333] font-gramatika">
               <span className="font-medium tracking-tight">{product.name} |</span>
               <span className="text-[#666]">{product.edition}</span>
               {product.isNew && (

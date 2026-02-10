@@ -1,4 +1,5 @@
 'use client'
+import Finishes from "@/components/sections/Finishes";
 import Hero from "@/components/sections/Hero";
 
 

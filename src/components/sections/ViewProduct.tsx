@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { CiCirclePlus } from "react-icons/ci";
-import hero1 from "../../../public/images/product/hero/Gemini_Generated_Image_pjaid6pjaid6pjai.png"
+import hero1 from "../../../public/images/product/hero/hero.png"
 import slider1 from "../../../public/images/product/slider/1.png"
 import slider2 from "../../../public/images/product/slider/2.png"
 import slider3 from "../../../public/images/product/slider/3.png"
@@ -22,124 +22,89 @@ import weaveCamelcoat from "../../../public/images/product/Weave/camelcoat-03.jp
 
 
 
-
 import { Footer } from '../ui/Footer'
+import Link from 'next/link';
+import { Product } from '@/data/products'
 
+interface ViewProductProps {
+  product: Product
+}
 
-const ViewProduct = () => {
+const ViewProduct = ({ product }: ViewProductProps) => {
   const [selectedColor, setSelectedColor] = useState(0)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [openSection, setOpenSection] = useState("")
   const [activeColorCategory, setActiveColorCategory] = useState("classic")
 
-
-  
-  // Sample data
-  const product = {
-    name: "Celato | Iridium Edition",
-    description: "Celesto is a reference to what is concealed to keep a memory intact; it's an archetype in which beauty is revealed in stages. A monolithic appearance makes Celato a contemporary memoir, like a legend that tells of magnificent treasures safeguarded below sacred stones. Celesto reveals its dual soul: with many internal hidden, almost secret spaces, it combines several tessellate to form a whole aesthetic function and an incredible ability to make a unique piece of design, a combination of tradition and modernity.",
-    details: "At Milan Design Week 2023, De Castelli presents Iridium Edition: a selection of the brand's iconic furniture which fully expresses its aesthetic. The unique cobalt blue lacquer on the inside combined with the new Delirium finish transforms each piece into a presence with intense, vibrant character.",
-    designer: "DESIGN | R&D De Castelli"
-  }
-
-  // Online image URLs for slider
+  // Use product data from props
   const sliderImages = [slider1, slider2, slider3]
+  const colors = product.colors
+  const affinityImages = product.affinityImages
 
-  const colors = [
-    { id: 4, name: "Classic Dove", code: "#F8F9FA", category: "classic" },
-    { id: 5, name: "Classic Verona", code: "#FFFFF0", category: "classic" },
-    { id: 6, name: "Classic Sand", code: "#F4E4C1", category: "classic" },
-    { id: 7, name: "Plate Dove", code: "#C0C0C0", category: "plate" },
-    { id: 8, name: "Plate Verona", code: "#CD7F32", category: "plate" },
-    { id: 9, name: "Plate Black", code: "#2C2C2C", category: "plate" },
-    { id: 10, name: "Weave Dove", code: "#D2B48C", category: "weave" },
-    { id: 11, name: "Weave Verona", code: "#36454F", category: "weave" },
-    { id: 12, name: "Weave Gold", code: "#FFD700", category: "weave" }
-  ]
+  const colorImages = [
+    // Classic
+    classicDove,
+    classicVerona,
+    classicCamelcoat,
 
-const colorImages = [
-  // Classic
-  classicDove,
-  classicVerona,
-  classicCamelcoat,
+    // Plate
+    plateDove,
+    plateVerona,
+    plateCamelcoat,
 
-  // Plate
-  plateDove,
-  plateVerona,
-  plateCamelcoat,
-
-  // Weave
-  weaveDove,
-  weaveVerona,
-  weaveCamelcoat
-]
-
-
-  // Online URLs for affinity products
-  const affinityImages = [
-    'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1567016376408-0226e4d0c1ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    // Weave
+    weaveDove,
+    weaveVerona,
+    weaveCamelcoat
   ]
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % sliderImages.length)
+    setCurrentSlide((prev: number) => (prev + 1) % sliderImages.length)
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + sliderImages.length) % sliderImages.length)
+    setCurrentSlide((prev: number) => (prev - 1 + sliderImages.length) % sliderImages.length)
   }
-
   return (
     <>
     <div className="min-h-screen bg-white text-black">
       {/* Main Hero Image */}
-      <div className='relative h-[100vh] w-full'>
+      <div className='relative h-screen w-full'>
         <Image 
           src={hero1}
           alt='Product Hero Image'
           fill
+          sizes="100vw"
           className='object-cover'
           priority
         />
       </div>
-
       {/* Product Info Section */}
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-15 py-16 md:py-15">
         {/* Product Name */}
         <h1 className="text-1xl text-gray-900 md:text-2xl lg:text-4xl mb-8 tracking-tight font-gramatika font-[300] ">
-          Lithe | Iridium Edition
+          {product.name}
         </h1>
-
         {/* Description in two columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10 lg:gap-0 mb-36">
-
+    <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10 lg:gap-0 mb-36">
   {/* DESCRIPTION */}
   <div className="max-w-5xl space-y-0 font-gramatika tracking-wide leading-5">
     <p className="text-[19px] text-gray-700 ">
-      Imagine the luxurious look and feel of faux leather combined with the durability and affordability of laminate. Introducing our revolutionary leather laminate!
-      It has a realistic leather texture, stain resistance, water repellency and ease of manitenance.
-     
+      {product.description}
     </p>
     <p className="text-[19px] text-gray-700">
-       We offer the look and feel of real leather without the associate high cost and maintenance.
-      With a wide range of 45 varieties, it is poppularly used in wardrobe internals, wall paneling. shutters etc.
+       {product.details}
     </p>
   </div>
-
-
   {/* SIDE META */}
   <div className="flex items-start lg:justify-center font-gramatika">
     <p className="text-[16px] text-gray-900 uppercase tracking-wider">
       <span className="text-[12px] relative -top-2 mr-2 text-gray-600">DESIGN</span>
-      R&D SpaceOne
+      {product.designer}
     </p>
   </div>
-
 </div>
-
-
 {/* ===== Premium Center Slider ===== */}
 <div className="mb-32">
   <div
@@ -147,17 +112,10 @@ const colorImages = [
     onClick={(e) => {
       const imgBox = document.getElementById("product-image-box");
       if (!imgBox) return;
-
       const rect = imgBox.getBoundingClientRect();
-
       const clickX = e.clientX;
-
-      // 👉 if click is INSIDE image → do nothing
       if (clickX >= rect.left && clickX <= rect.right) return;
-
-      // 👉 outside → slide based on side
       const center = window.innerWidth / 2;
-
       if (clickX < center) prevSlide();
       else nextSlide();
     }}
@@ -183,6 +141,7 @@ const colorImages = [
               src={img}
               alt={`Product view ${index + 1}`}
               fill
+              sizes="55vw"
               className="object-contain select-none"
               draggable={false}
               priority
@@ -192,17 +151,13 @@ const colorImages = [
       ))}
     </div>
   </div>
-
   {/* fraction */}
   <div className="text-center mt-0 text-sm text-gray-500 tracking-wide font-light">
     {currentSlide + 1} / {sliderImages.length}
   </div>
 </div>
-
-
 {/* ===== FULL SCREEN METAL DETAILS SECTION ===== */}
 <div className="min-h-auto bg-white px-8 md:px-16 lg:px-15 font-gramatika">
-
   {[
     { id: "finishes", title: "Metal finishes" },
     { id: "materials", title: "Other materials" },
@@ -210,9 +165,7 @@ const colorImages = [
     { id: "downloads", title: "Downloads" },
   ].map((section) => (
     <div key={section.id} className="w-full">
-
       <hr className="border-gray-300" />
-
       {/* HEADER */}
       <button
         onClick={() =>
@@ -223,14 +176,12 @@ const colorImages = [
         <h2 className="text-[18px] tracking-wide">
           {section.title}
         </h2>
-
         <CiCirclePlus
           className={`text-3xl transition-all duration-300 ${
             openSection === section.id ? "rotate-45 text-blue-600" : ""
           }`}
         />
       </button>
-
       {/* CONTENT */}
       <div
         className={`overflow-hidden transition-all duration-700 ${
@@ -239,7 +190,6 @@ const colorImages = [
             : "max-h-0 opacity-0"
         }`}
       >
-
         {/* FINISHES GRID */}
         {section.id === "finishes" && (
           <>
@@ -258,21 +208,21 @@ const colorImages = [
               {colors.filter(color => color.category === 'classic').map((color, index) => {
                 const originalIndex = colors.findIndex(c => c.id === color.id);
                 return (
-                  <div key={color.id} className="group cursor-pointer">
+                  <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
                     <div className="relative w-full aspect-square overflow-hidden">
                       <Image
                         src={colorImages[originalIndex]}
                         alt=""
                         fill
+                        sizes="20vw"
                         className="object-cover group-hover:scale-105 transition duration-500"
                       />
                     </div>
-                    <p className="mt-3 text-sm">{color.name}</p>
-                  </div>
+                    <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
+                  </Link>
                 );
               })}
             </div>
-
             {/* Plate */}
             <p 
               className={`text-gray-500 mb-1 cursor-pointer hover:text-gray-600 transition-colors ${
@@ -288,21 +238,21 @@ const colorImages = [
               {colors.filter(color => color.category === 'plate').map((color, index) => {
                 const originalIndex = colors.findIndex(c => c.id === color.id);
                 return (
-                  <div key={color.id} className="group cursor-pointer">
+                  <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
                     <div className="relative w-full aspect-square overflow-hidden">
                       <Image
                         src={colorImages[originalIndex]}
                         alt=""
                         fill
+                        sizes="20vw"
                         className="object-cover group-hover:scale-105 transition duration-500"
                       />
                     </div>
-                    <p className="mt-3 text-sm">{color.name}</p>
-                  </div>
+                    <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
+                  </Link>
                 );
               })}
             </div>
-
             {/* Weave */}
             <p 
               className={`text-gray-500 mb-1 cursor-pointer hover:text-gray-600 transition-colors ${
@@ -318,34 +268,31 @@ const colorImages = [
               {colors.filter(color => color.category === 'weave').map((color, index) => {
                 const originalIndex = colors.findIndex(c => c.id === color.id);
                 return (
-                  <div key={color.id} className="group cursor-pointer">
+                  <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
                     <div className="relative w-full aspect-square overflow-hidden">
                       <Image
                         src={colorImages[originalIndex]}
                         alt=""
                         fill
+                        sizes="20vw"
                         className="object-cover group-hover:scale-105 transition duration-500"
                       />
                     </div>
-                    <p className="mt-3 text-sm">{color.name}</p>
-                  </div>
+                    <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
+                  </Link>
                 );
               })}
             </div>
           </>
         )}
-
         {section.id === "materials" && (
           <p className="text-gray-700 text-lg">
             Brass, copper, patinated metals and custom finishes available.
           </p>
         )}
-
         {section.id === "dimensions" && (
           <div className="w-full flex justify-center items-center py-16">
-
   <div className="w-[90%] sm:w-[60%] md:w-[40%] lg:w-[28%] ">
-
     <svg
       viewBox="0 0 200 200"
       className="w-full h-auto"
@@ -355,7 +302,6 @@ const colorImages = [
     >
       {/* ===== BOX ===== */}
       <rect x="40" y="40" width="120" height="120" fill='lightgray'/>
-
       {/* ===== TOP WIDTH LINE ===== */}
       <line x1="40" y1="25" x2="160" y2="25" />
       <text
@@ -368,10 +314,8 @@ const colorImages = [
       >
         30
       </text>
-
       {/* ===== LEFT HEIGHT LINE ===== */}
       <line x1="25" y1="40" x2="25" y2="160" />
-
       <text
         x="12"
         y="105"
@@ -384,14 +328,9 @@ const colorImages = [
         30
       </text>
     </svg>
-
   </div>
-
 </div>
-
-
         )}
-
         {section.id === "downloads" && (
           <div className="flex flex-col gap-4 text-lg">
             <a className="underline hover:text-blue-600">Product Sheet PDF</a>
@@ -400,37 +339,42 @@ const colorImages = [
           </div>
         )}
       </div>
-
     </div>
   ))}
-
   <hr className="border-gray-300" />
 </div>
-
-
-
         {/* Affinities with this product */}
 <div className="w-full min-h-screen flex flex-col">
-
   <h2 className="text-4xl font-gramatika font-[100] text-center py-16">
     Affinities with this product
   </h2>
-
-  <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[70vh]">
-    {affinityImages.map((src, index) => (
-      <div key={index} className="relative w-full h-full overflow-hidden group">
+  <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[80vh]">
+    {affinityImages.map((n, index) => (
+      <Link href={`/finishes/${n.name}`} key={index}>
+      <div key={index} className="relative w-full h-full overflow-hidden group cursor-pointer">
         <Image
-          src={src}
+          src={n.src}
           alt={`Affinity ${index + 1}`}
           fill
+          sizes="(max-width: 768px) 100vw, 33vw"
           priority
           className="
             object-cover
             transition-transform duration-700
-            group-hover:scale-105
-          "
+            group-hover:scale-105"
         />
+        <h2 className="
+  absolute inset-0
+  flex items-center justify-center
+  text-white font-light font-gramatika text-[2rem]
+  opacity-0 group-hover:opacity-100
+  transition-opacity duration-300
+">
+  {n.name}
+</h2>
+
       </div>
+      </Link>
     ))}
   </div>
 </div>
