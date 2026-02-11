@@ -1,33 +1,62 @@
 import Link from "next/link"
 import { FaArrowRight } from "react-icons/fa";
 
-const navLinks = [
-  "Products",
-  "Projects",
-  "Materioteca",
-  "Cultura",
-  "Be inspired",
-  "About",
-  "Dealers",
-  "Agenda",
-  "Designer",
-]
-
-const socialLinks = ["Facebook", "Instagram", "Vimeo", "Pinterest", "Linkedin"]
-
-const certifications = [
-  "UNI EN ISO 9001:2015",
-  "UNI EN 1090:2009",
-  "UNI EN ISO 14001:2015",
-]
-
-const legalLinks = [
-  "Privacy Policy",
-  "Cookie Policy",
-  "Cookie preferences",
-  "Whistleblowing",
-  "Terms & Conditions",
-]
+const footerData = {
+  navigation: {
+    title: "Navigation",
+    links: [
+      { name: "Products", href: "/products" },
+      { name: "Projects", href: "/projects" },
+      { name: "Materioteca", href: "/materioteca" },
+      { name: "Cultura", href: "/cultura" },
+      { name: "Be inspired", href: "/be-inspired" },
+      { name: "About", href: "/about-us" },
+      { name: "Dealers", href: "/dealers" },
+      { name: "Agenda", href: "/agenda" },
+      { name: "Designer", href: "/designer" }
+    ]
+  },
+  newsletter: {
+    title: "Newsletter",
+    text: "Join our newsletter",
+    href: "#"
+  },
+  company: {
+    name: "SpaceOne",
+    details: [
+      "120/A, Bombay Talkies compound,",
+      "Dadiseth Lane,",
+      "Off S.V. Road,",
+      "Opp. Malad Sahakari Bank,",
+      "Malad West,",
+      "Mumbai 400064. India",
+    ]
+  },
+  certifications: {
+    title: "Certifications",
+    items: [
+      "UNI EN ISO 9001:2015",
+      "UNI EN 1090:2009", 
+      "UNI EN ISO 14001:2015"
+    ],
+    additional: "Environmental labeling of packaging"
+  },
+  social: {
+    title: "Follow us on",
+    platforms: ["Facebook", "Instagram", "Vimeo", "Pinterest", "Linkedin"]
+  },
+  legal: {
+    studio: "Design Studio Nuvole",
+    links: [
+      "Privacy Policy",
+      "Cookie Policy", 
+      "Cookie preferences",
+      "Whistleblowing",
+      "Terms & Conditions"
+    ],
+    copyright: "Copyright © 2025 Spaceone. All rights reserved."
+  }
+}
 
 export function Footer() {
   return (
@@ -37,14 +66,15 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {/* Column 1 - Navigation */}
           <nav aria-label="Footer navigation">
+            <h3 className="text-base text-footer-muted mb-4">{footerData.navigation.title}</h3>
             <ul className="flex flex-col gap-1 leading-4">
-              {navLinks.map((link) => (
-                <li key={link}>
+              {footerData.navigation.links.map((link) => (
+                <li key={link.name}>
                   <Link
-                    href="#"
+                    href={link.href}
                     className="text-[17px] font-gramatika text-footer-muted transition-colors hover:text-footer-foreground"
                   >
-                    {link}
+                    {link.name}
                   </Link>
                 </li>
               ))}
@@ -53,41 +83,37 @@ export function Footer() {
 
           {/* Column 2 - Newsletter */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-base text-footer-muted">Newsletter</h3>
+            <h3 className="text-base text-footer-muted">{footerData.newsletter.title}</h3>
             <Link
-              href="#"
+              href={footerData.newsletter.href}
               className="inline-flex items-center gap-2 text-base text-footer-muted transition-colors hover:text-footer-foreground"
             >
-              Join our newsletter
+              {footerData.newsletter.text}
               <FaArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
           {/* Column 3 - Company Info */}
-          <div className="flex flex-col gap-4 ">
-            <h3 className="text-base text-footer-muted ">De Castelli Srl</h3>
-            <div className="flex flex-col gap-0.5 text-sm leading-5 text-footer-dim text-gray-400 ">
-              <p>{"SOCIET\u00C0 UNIPERSONALE"}</p>
-              <p>Via delle Industrie 10</p>
-              <p>Crocetta del Montello (TV), Italia</p>
-              <p>Reg. Imp. di Treviso N. 302905</p>
-              <p>C.S. Euro 119.000,00 i.v.</p>
-              <p>P.Iva 03842970265</p>
-              <p>SDI: T04ZHR3</p>
+          <div className="flex flex-col gap-4">
+            <h3 className="text-base text-footer-muted">{footerData.company.name}</h3>
+            <div className="flex flex-col gap-0.5 text-sm leading-5 text-footer-dim text-gray-400">
+              {footerData.company.details.map((detail, index) => (
+                <p key={index}>{detail}</p>
+              ))}
             </div>
           </div>
 
           {/* Column 4 - Certifications */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-base text-footer-muted">Certifications</h3>
-            <div className="flex flex-col gap-0.5 text-sm leading-5 text-footer-dim text-gray-400 ">
-              {certifications.map((cert) => (
+            <h3 className="text-base text-footer-muted">{footerData.certifications.title}</h3>
+            <div className="flex flex-col gap-0.5 text-sm leading-5 text-footer-dim text-gray-400">
+              {footerData.certifications.items.map((cert) => (
                 <p key={cert} className="text-sm text-footer-dim">
                   {cert}
                 </p>
               ))}
               <p className="mt-3 text-sm text-footer-dim">
-                Environmental labeling of packaging
+                {footerData.certifications.additional}
               </p>
             </div>
           </div>
@@ -100,9 +126,9 @@ export function Footer() {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           {/* Social Links */}
           <div className="flex flex-col gap-1">
-            <p className="text-sm text-footer-dim">Follow us on</p>
+            <p className="text-sm text-footer-dim">{footerData.social.title}</p>
             <div className="flex flex-wrap gap-x-1">
-              {socialLinks.map((social, i) => (
+              {footerData.social.platforms.map((social, i) => (
                 <span key={social} className="text-sm text-footer-muted">
                   <Link
                     href="#"
@@ -110,7 +136,7 @@ export function Footer() {
                   >
                     {social}
                   </Link>
-                  {i < socialLinks.length - 1 && ","}
+                  {i < footerData.social.platforms.length - 1 && ","}
                 </span>
               ))}
             </div>
@@ -118,9 +144,9 @@ export function Footer() {
 
           {/* Legal */}
           <div className="flex flex-col items-start gap-1 lg:items-end">
-            <p className="text-sm text-footer-muted">Design Studio Nuvole</p>
+            <p className="text-sm text-footer-muted">{footerData.legal.studio}</p>
             <div className="flex flex-wrap gap-x-1 lg:justify-end">
-              {legalLinks.map((link, i) => (
+              {footerData.legal.links.map((link, i) => (
                 <span key={link} className="text-sm text-footer-dim">
                   <Link
                     href="#"
@@ -128,11 +154,11 @@ export function Footer() {
                   >
                     {link}
                   </Link>
-                  {i < legalLinks.length - 1 && ","}
+                  {i < footerData.legal.links.length - 1 && ","}
                 </span>
               ))}
               <span className="text-sm text-footer-dim">
-                {"Copyright \u00A9 2025 De Castelli. All rights reserved."}
+                {footerData.legal.copyright}
               </span>
             </div>
           </div>

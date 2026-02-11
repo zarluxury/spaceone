@@ -10,7 +10,7 @@ export interface Product {
   heroImage: string
   sliderImages: string[]
   colors: Color[]
-  affinityImages: AffinityImage[]
+  suggestProduct: SuggestProduct[]
 }
 
 export interface Color {
@@ -18,6 +18,12 @@ export interface Color {
   name: string
   code: string
   category: 'classic' | 'plate' | 'weave'
+  image: string
+}
+
+export interface SuggestProduct {
+  src: string
+  name: string
 }
 
 export interface AffinityImage {
@@ -43,17 +49,17 @@ export const products: Product[] = [
       '/images/product/slider/3.png'
     ],
     colors: [
-      { id: 4, name: "Classic Dove", code: "#F8F9FA", category: "classic" },
-      { id: 5, name: "Classic Verona", code: "#FFFFF0", category: "classic" },
-      { id: 6, name: "Classic Sand", code: "#F4E4C1", category: "classic" },
-      { id: 7, name: "Plate Dove", code: "#C0C0C0", category: "plate" },
-      { id: 8, name: "Plate Verona", code: "#CD7F32", category: "plate" },
-      { id: 9, name: "Plate Black", code: "#2C2C2C", category: "plate" },
-      { id: 10, name: "Weave Dove", code: "#D2B48C", category: "weave" },
-      { id: 11, name: "Weave Verona", code: "#36454F", category: "weave" },
-      { id: 12, name: "Weave Gold", code: "#FFD700", category: "weave" }
+      { id: 1, name: "Classic Dove", code: "#F8F9FA", category: "classic", image: "/images/product/Classic/dove-01.jpg" },
+      { id: 2, name: "Classic Verona", code: "#FFFFF0", category: "classic", image: "/images/product/Classic/verona-02.jpg" },
+      { id: 3, name: "Classic Sand", code: "#F4E4C1", category: "classic", image: "/images/product/Classic/camelcoat-03.jpg" },
+      { id: 4, name: "Plate Dove", code: "#C0C0C0", category: "plate", image: "/images/product/Plate/dove-01.jpg" },
+      { id: 5, name: "Plate Verona", code: "#CD7F32", category: "plate", image: "/images/product/Plate/verona-02.jpg" },
+      { id: 6, name: "Plate Black", code: "#2C2C2C", category: "plate", image: "/images/product/Plate/camelcoat-03.jpg" },
+      { id: 7, name: "Weave Dove", code: "#D2B48C", category: "weave", image: "/images/product/Weave/dove-01.jpg" },
+      { id: 8, name: "Weave Verona", code: "#36454F", category: "weave", image: "/images/product/Weave/verona-02.jpg" },
+      { id: 9, name: "Weave Gold", code: "#FFD700", category: "weave", image: "/images/product/Weave/camelcoat-03.jpg" }
     ],
-    affinityImages: [
+    suggestProduct: [
       {
         src: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         name: 'Cipher'
@@ -84,11 +90,11 @@ export const products: Product[] = [
       '/images/product/slider/3.png'
     ],
     colors: [
-      { id: 4, name: "Classic Dove", code: "#F8F9FA", category: "classic" },
-      { id: 5, name: "Classic Verona", code: "#FFFFF0", category: "classic" },
-      { id: 6, name: "Classic Sand", code: "#F4E4C1", category: "classic" }
+      { id: 4, name: "Classic Dove", code: "#F8F9FA", category: "classic", image: "/images/product/Classic/dove-01.jpg" },
+      { id: 5, name: "Classic Verona", code: "#FFFFF0", category: "classic", image: "/images/product/Classic/verona-02.jpg" },
+      { id: 6, name: "Classic Sand", code: "#F4E4C1", category: "classic", image: "/images/product/Classic/camelcoat-03.jpg" }
     ],
-    affinityImages: [
+    suggestProduct: [
       {
         src: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         name: 'Cipher'
@@ -114,4 +120,16 @@ export function getProductsByCategory(category: string): Product[] {
 // Function to get all products
 export function getAllProducts(): Product[] {
   return products
+}
+
+// Function to get color by name
+export function getColorByName(name: string): Color | undefined {
+  const allColors = products.flatMap(product => product.colors)
+  return allColors.find(color => color.name.replace(/\s+/g, '-') === name)
+}
+
+// Function to get all colors by category
+export function getColorsByCategory(category: 'classic' | 'plate' | 'weave'): Color[] {
+  const allColors = products.flatMap(product => product.colors)
+  return allColors.filter(color => color.category === category)
 }

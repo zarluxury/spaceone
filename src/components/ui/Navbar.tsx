@@ -162,11 +162,11 @@ const Navbar = () => {
                 {/* Column 2 */}
                 <nav className="flex flex-col gap-1">
                   <Link
-                    href="/about"
+                    href="/about-us"
                     onClick={closeMenu}
                     className="text-sm md:text-base font-medium hover:opacity-60 transition-opacity"
                   >
-                    About
+                    AboutUs
                   </Link>
                   <Link
                     href="/dealers"
@@ -223,11 +223,11 @@ const Navbar = () => {
                   Careers
                 </Link>
                 <Link
-                  href="/contacts"
+                  href="/contact-us"
                   onClick={closeMenu}
                   className="hover:opacity-60 transition-opacity"
                 >
-                  Contacts
+                  ContactUs
                 </Link>
               </div>
 

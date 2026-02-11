@@ -7,20 +7,6 @@ import slider1 from "../../../public/images/product/slider/1.png"
 import slider2 from "../../../public/images/product/slider/2.png"
 import slider3 from "../../../public/images/product/slider/3.png"
 
-import classicDove from "../../../public/images/product/Classic/dove-01.jpg"
-import classicVerona from "../../../public/images/product/Classic/verona-02.jpg"
-import classicCamelcoat from "../../../public/images/product/Classic/camelcoat-03.jpg"
-
-
-import plateDove from "../../../public/images/product/Plate/dove-01.jpg"
-import plateVerona from "../../../public/images/product/Plate/verona-02.jpg"
-import plateCamelcoat from "../../../public/images/product/Plate/camelcoat-03.jpg"
-
-import weaveDove from "../../../public/images/product/Weave/dove-01.jpg"
-import weaveVerona from "../../../public/images/product/Weave/verona-02.jpg"
-import weaveCamelcoat from "../../../public/images/product/Weave/camelcoat-03.jpg"
-
-
 
 import { Footer } from '../ui/Footer'
 import Link from 'next/link';
@@ -40,24 +26,7 @@ const ViewProduct = ({ product }: ViewProductProps) => {
   // Use product data from props
   const sliderImages = [slider1, slider2, slider3]
   const colors = product.colors
-  const affinityImages = product.affinityImages
-
-  const colorImages = [
-    // Classic
-    classicDove,
-    classicVerona,
-    classicCamelcoat,
-
-    // Plate
-    plateDove,
-    plateVerona,
-    plateCamelcoat,
-
-    // Weave
-    weaveDove,
-    weaveVerona,
-    weaveCamelcoat
-  ]
+  const suggestProduct = product.suggestProduct
 
   const nextSlide = () => {
     setCurrentSlide((prev: number) => (prev + 1) % sliderImages.length)
@@ -205,23 +174,20 @@ const ViewProduct = ({ product }: ViewProductProps) => {
             <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-16 mb-1 transition-all duration-500 ${
               activeColorCategory === 'classic' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden mb-0'
             }`}>
-              {colors.filter(color => color.category === 'classic').map((color, index) => {
-                const originalIndex = colors.findIndex(c => c.id === color.id);
-                return (
-                  <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
-                    <div className="relative w-full aspect-square overflow-hidden">
-                      <Image
-                        src={colorImages[originalIndex]}
-                        alt=""
-                        fill
-                        sizes="20vw"
-                        className="object-cover group-hover:scale-105 transition duration-500"
-                      />
-                    </div>
-                    <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
-                  </Link>
-                );
-              })}
+              {colors.filter(color => color.category === 'classic').map((color, index) => (
+                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
+                  <div className="relative w-full aspect-square overflow-hidden">
+                    <Image
+                      src={color.image}
+                      alt=""
+                      fill
+                      sizes="20vw"
+                      className="object-cover group-hover:scale-105 transition duration-500"
+                    />
+                  </div>
+                  <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
+                </Link>
+              ))}
             </div>
             {/* Plate */}
             <p 
@@ -235,23 +201,20 @@ const ViewProduct = ({ product }: ViewProductProps) => {
             <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-16 mb-1 transition-all duration-500 ${
               activeColorCategory === 'plate' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden mb-0'
             }`}>
-              {colors.filter(color => color.category === 'plate').map((color, index) => {
-                const originalIndex = colors.findIndex(c => c.id === color.id);
-                return (
-                  <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
-                    <div className="relative w-full aspect-square overflow-hidden">
-                      <Image
-                        src={colorImages[originalIndex]}
-                        alt=""
-                        fill
-                        sizes="20vw"
-                        className="object-cover group-hover:scale-105 transition duration-500"
-                      />
-                    </div>
-                    <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
-                  </Link>
-                );
-              })}
+              {colors.filter(color => color.category === 'plate').map((color, index) => (
+                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
+                  <div className="relative w-full aspect-square overflow-hidden">
+                    <Image
+                      src={color.image}
+                      alt=""
+                      fill
+                      sizes="20vw"
+                      className="object-cover group-hover:scale-105 transition duration-500"
+                    />
+                  </div>
+                  <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
+                </Link>
+              ))}
             </div>
             {/* Weave */}
             <p 
@@ -265,23 +228,20 @@ const ViewProduct = ({ product }: ViewProductProps) => {
             <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 transition-all duration-500 ${
               activeColorCategory === 'weave' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden'
             }`}>
-              {colors.filter(color => color.category === 'weave').map((color, index) => {
-                const originalIndex = colors.findIndex(c => c.id === color.id);
-                return (
-                  <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
-                    <div className="relative w-full aspect-square overflow-hidden">
-                      <Image
-                        src={colorImages[originalIndex]}
-                        alt=""
-                        fill
-                        sizes="20vw"
-                        className="object-cover group-hover:scale-105 transition duration-500"
-                      />
-                    </div>
-                    <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
-                  </Link>
-                );
-              })}
+              {colors.filter(color => color.category === 'weave').map((color, index) => (
+                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
+                  <div className="relative w-full aspect-square overflow-hidden">
+                    <Image
+                      src={color.image}
+                      alt=""
+                      fill
+                      sizes="20vw"
+                      className="object-cover group-hover:scale-105 transition duration-500"
+                    />
+                  </div>
+                  <p className="mt-3 text-sm hover:text-blue-600 transition-colors">{color.name}</p>
+                </Link>
+              ))}
             </div>
           </>
         )}
@@ -349,7 +309,7 @@ const ViewProduct = ({ product }: ViewProductProps) => {
     Affinities with this product
   </h2>
   <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[80vh]">
-    {affinityImages.map((n, index) => (
+    {suggestProduct.map((n, index) => (
       <Link href={`/finishes/${n.name}`} key={index}>
       <div key={index} className="relative w-full h-full overflow-hidden group cursor-pointer">
         <Image
@@ -358,18 +318,9 @@ const ViewProduct = ({ product }: ViewProductProps) => {
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
           priority
-          className="
-            object-cover
-            transition-transform duration-700
-            group-hover:scale-105"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <h2 className="
-  absolute inset-0
-  flex items-center justify-center
-  text-white font-light font-gramatika text-[2rem]
-  opacity-0 group-hover:opacity-100
-  transition-opacity duration-300
-">
+        <h2 className="absolute inset-0 flex items-center justify-center text-white font-light font-gramatika text-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
   {n.name}
 </h2>
 

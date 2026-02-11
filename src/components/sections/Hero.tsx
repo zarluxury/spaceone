@@ -35,9 +35,9 @@ useLayoutEffect(() => {
           { ref: col2, speed: 1.5 },
         ]
       : [
-          { ref: col1, speed: 2 },
-          { ref: col2, speed: 3 },
-          { ref: col3, speed: 1.5 },
+          { ref: col1, speed: 1 },
+          { ref: col2, speed: 2 },
+          { ref: col3, speed: 1.2 },
         ];
 
     columns.forEach(({ ref, speed }) => {
@@ -120,7 +120,7 @@ useLayoutEffect(() => {
             className="w-full h-full object-cover"
           />
         )}
-      </div>
+      </div> 
     ));
 
   return (
