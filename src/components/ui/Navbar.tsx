@@ -173,11 +173,11 @@ const Navbar = () => {
                     AboutUs
                   </Link>
                   <Link
-                    href="/dealers"
+                    href="/team"
                     onClick={closeMenu}
                     className="text-sm md:text-base font-medium hover:opacity-60 transition-opacity"
                   >
-                    Dealers
+                    OurTeam
                   </Link>
                   <Link
                     href="/agenda"
