@@ -49,7 +49,7 @@ export const products: Product[] = [
       '/images/product/slider/3.png'
     ],
     colors: [
-      { id: 1, name: "Classic Dove", code: "#F8F9FA", category: "classic", image: "/images/product/Classic/dove-01.jpg" },
+      { id: 1, name: "Classic Dove", code: "#F8F9FA", category: "classic", image: "https://spaceonesurfaces.com/Catalogues/PDFs/LITHE/101.jpg"},
       { id: 2, name: "Classic Verona", code: "#FFFFF0", category: "classic", image: "/images/product/Classic/verona-02.jpg" },
       { id: 3, name: "Classic Sand", code: "#F4E4C1", category: "classic", image: "/images/product/Classic/camelcoat-03.jpg" },
       { id: 4, name: "Plate Dove", code: "#C0C0C0", category: "plate", image: "/images/product/Plate/dove-01.jpg" },

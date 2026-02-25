@@ -117,7 +117,7 @@ const Products = (props: ProductsProps) => {
         {categories.map((cat, idx) => (
           <button
             key={cat}
-            className={`text-1xl md:text-3xl lg:text-6xl py-2 font-light tracking-tight transition-colors duration-300 tracking-wide cursor-pointer  ${
+            className={`text-1xl md:text-3xl lg:text-6xl py-2 font-light  transition-colors duration-300 tracking-wide cursor-pointer  ${
               idx === 0 ? 'text-[#1a1a1a]' : 'text-[#b0b0b0] hover:text-[#666]'
             }`}
           >
@@ -134,7 +134,7 @@ const Products = (props: ProductsProps) => {
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-fill transition-transform duration-700 group-hover:scale-105"
               />
             </div>
             <div className="flex items-baseline gap-1 text-[15px] text-[#333] font-gramatika">

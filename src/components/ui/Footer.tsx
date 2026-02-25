@@ -46,7 +46,7 @@ const footerData = {
     platforms: ["Facebook", "Instagram", "Vimeo", "Pinterest", "Linkedin"]
   },
   legal: {
-    studio: "Design Studio Nuvole",
+    studio: "Design Studio Zar Luxury",
     links: [
       "Privacy Policy",
       "Cookie Policy", 

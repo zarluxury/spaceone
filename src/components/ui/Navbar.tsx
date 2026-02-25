@@ -18,6 +18,7 @@ import {
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false) // New state for search modal
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -29,7 +30,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 w-full z-50">
-      <div className="h-14 shadow-2xs bg-white backdrop-blur-md grid grid-cols-3 items-center px-6 text-black">
+      <div className="h-14 shadow-2xs bg-white backdrop-blur-md border-b-2 border-neutral-200 grid grid-cols-3 items-center px-6 text-black">
         
         {/* Left: Navigation Links & Hamburger */}
         <div className="flex items-center">
@@ -60,16 +61,18 @@ const Navbar = () => {
         {/* Right: Actions */}
         <div className="flex justify-end items-center">
           <ul className="flex items-center gap-5">
-            <li className="cursor-pointer p-2 hover:bg-white/10 rounded-full transition-colors">
+            <li 
+              onClick={() => setIsSearchOpen(true)} // Open search modal
+              className="cursor-pointer p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
               <CiSearch className="text-2xl" />
             </li>
             <li
-  onClick={() => setIsLoginOpen(true)}
-  className="cursor-pointer p-2 hover:bg-white/10 rounded-full transition-colors"
->
-  <CiUser className="text-2xl" />
-</li>
-
+              onClick={() => setIsLoginOpen(true)}
+              className="cursor-pointer p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <CiUser className="text-2xl" />
+            </li>
           </ul>
         </div>
       </div>
@@ -102,12 +105,20 @@ const Navbar = () => {
           {/* Right Icons */}
           <div className="flex justify-end items-center gap-5">
             <button
+              onClick={() => {
+                setIsSearchOpen(true)
+                closeMenu()
+              }}
               className="cursor-pointer p-2 hover:opacity-70 transition-opacity"
               aria-label="Search"
             >
               <CiSearch className="text-2xl" />
             </button>
             <button
+              onClick={() => {
+                setIsLoginOpen(true)
+                closeMenu()
+              }}
               className="cursor-pointer p-2 hover:opacity-70 transition-opacity"
               aria-label="User account"
             >
@@ -149,14 +160,7 @@ const Navbar = () => {
                   >
                     Downloads
                   </Link>
-                  
-                  <Link
-                    href="/cultura"
-                    onClick={closeMenu}
-                    className="text-sm md:text-base font-medium hover:opacity-60 transition-opacity"
-                  >
-                    Cultura
-                  </Link>
+
                 </nav>
 
                 {/* Column 2 */}
@@ -192,16 +196,6 @@ const Navbar = () => {
                 </nav>
               </div>
 
-              {/* Be Inspired */}
-              <div className="mt-8">
-                <Link
-                  href="/be-inspired"
-                  onClick={closeMenu}
-                  className="text-sm md:text-base font-medium hover:opacity-60 transition-opacity"
-                >
-                  Be inspired
-                </Link>
-              </div>
             </div>
 
             {/* Bottom Section */}
@@ -295,7 +289,7 @@ const Navbar = () => {
           </div>
 
           {/* Right Featured Image - hidden on mobile */}
-          <div className="hidden lg:flex flex-col items-start w-[420px] xl:w-[500px] px-6 py-8 md:py-10">
+          <div className="hidden lg:flex flex-col items-start w-[380px] xl:w-[400px] px-6 py-8 md:py-10">
             <Link
               href="/metal-affinities"
               onClick={closeMenu}
@@ -315,78 +309,175 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Search Modal */}
+      <div
+        className={`
+          fixed inset-0 z-[200] flex items-center justify-center
+          bg-black/60 backdrop-blur-md
+          transition-all duration-300
+          ${isSearchOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+        `}
+        onClick={() => setIsSearchOpen(false)}
+      >
+        {/* Card */}
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={`
+            bg-white w-[500px] max-w-[92%]
+            px-8 py-8
+            shadow-2xl
+            transition-all duration-300
+            ${isSearchOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}
+          `}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-gramatika font-[100]">Search</h3>
+            <button onClick={() => setIsSearchOpen(false)}>
+              <RxCross2 className="text-xl hover:opacity-60" />
+            </button>
+          </div>
+
+          {/* Search Form */}
+          <form className="flex flex-col gap-5" onSubmit={(e) => {
+            e.preventDefault()
+            // Handle search logic here
+            console.log('Searching for:', e.target.search.value)
+            setIsSearchOpen(false)
+          }}>
+            <div className="relative">
+              <input
+                type="text"
+                name="search"
+                placeholder="What are you looking for?"
+                className="w-full border-b border-neutral-400 focus:outline-none py-3 text-base pr-10"
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="absolute right-0 top-1/2 -translate-y-1/2"
+              >
+                <CiSearch className="text-2xl hover:opacity-60 transition-opacity" />
+              </button>
+            </div>
+
+            {/* Optional: Quick Links or Categories */}
+            <div className="mt-4">
+              <p className="text-xs text-neutral-500 mb-3">Popular searches:</p>
+              <div className="flex flex-wrap gap-2">
+                <button 
+                  type="button"
+                  onClick={() => {
+                    console.log('Searching for: Products')
+                    setIsSearchOpen(false)
+                  }}
+                  className="text-xs px-3 py-1 border border-neutral-300 rounded-full hover:bg-neutral-100 transition"
+                >
+                  Products
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    console.log('Searching for: Downloads')
+                    setIsSearchOpen(false)
+                  }}
+                  className="text-xs px-3 py-1 border border-neutral-300 rounded-full hover:bg-neutral-100 transition"
+                >
+                  Downloads
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    console.log('Searching for: Metal Affinities')
+                    setIsSearchOpen(false)
+                  }}
+                  className="text-xs px-3 py-1 border border-neutral-300 rounded-full hover:bg-neutral-100 transition"
+                >
+                  Metal Affinities
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => {
+                    console.log('Searching for: Designers')
+                    setIsSearchOpen(false)
+                  }}
+                  className="text-xs px-3 py-1 border border-neutral-300 rounded-full hover:bg-neutral-100 transition"
+                >
+                  Designers
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
       {/* Login Modal */}
-<div
-  className={`
-    fixed inset-0 z-[200] flex items-center justify-center
-    bg-black/60 backdrop-blur-md
-    transition-all duration-300
-    ${isLoginOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
-  `}
-  onClick={() => setIsLoginOpen(false)}
->
-  {/* Card */}
-  <div
-    onClick={(e) => e.stopPropagation()}
-    className={`
-      bg-white w-[420px] max-w-[92%]
-      px-10 py-8
-      shadow-2xl
-      transition-all duration-300
-      ${isLoginOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}
-    `}
-  >
-    {/* Header */}
-    <div className="flex justify-between items-center mb-6">
-      <h3 className="text-lg font-gramatika font-[100]">Reserved area</h3>
+      <div
+        className={`
+          fixed inset-0 z-[200] flex items-center justify-center
+          bg-black/60 backdrop-blur-md
+          transition-all duration-300
+          ${isLoginOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+        `}
+        onClick={() => setIsLoginOpen(false)}
+      >
+        {/* Card */}
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className={`
+            bg-white w-[420px] max-w-[92%]
+            px-10 py-8
+            shadow-2xl
+            transition-all duration-300
+            ${isLoginOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"}
+          `}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-lg font-gramatika font-[100]">Reserved area</h3>
+            <button onClick={() => setIsLoginOpen(false)}>
+              <RxCross2 className="text-xl hover:opacity-60" />
+            </button>
+          </div>
 
-      <button onClick={() => setIsLoginOpen(false)}>
-        <RxCross2 className="text-xl hover:opacity-60" />
-      </button>
-    </div>
+          {/* Form */}
+          <form className="flex flex-col gap-5">
+            <input
+              type="email"
+              placeholder="Email"
+              className="border-b border-neutral-400 focus:outline-none py-2 text-sm"
+            />
 
-    {/* Form */}
-    <form className="flex flex-col gap-5">
-      <input
-        type="email"
-        placeholder="Email"
-        className="border-b border-neutral-400 focus:outline-none py-2 text-sm"
-      />
+            <input
+              type="password"
+              placeholder="Password"
+              className="border-b border-neutral-400 focus:outline-none py-2 text-sm"
+            />
 
-      <input
-        type="password"
-        placeholder="Password"
-        className="border-b border-neutral-400 focus:outline-none py-2 text-sm"
-      />
+            <p className="text-xs text-neutral-400 cursor-pointer hover:underline">
+              Have you lost your password?
+            </p>
 
-      <p className="text-xs text-neutral-400 cursor-pointer hover:underline">
-        Have you lost your password?
-      </p>
+            <div className="flex gap-4 mt-4">
+              <button
+                type="submit"
+                className="flex-1 border border-black rounded-full py-2 text-sm hover:bg-black hover:text-white transition"
+              >
+                LOG IN
+              </button>
 
-<div className="flex gap-4 mt-4">
-
-  <button
-    type="submit"
-    className="flex-1 border border-black rounded-full py-2 text-sm hover:bg-black hover:text-white transition"
-  >
-    LOG IN
-  </button>
-
-  <Link
-    href="/register"
-    className="flex-1 border border-black rounded-full py-2 text-sm text-center hover:bg-black hover:text-white transition"
-    onClick={() => setIsLoginOpen(false)}
-  >
-    REGISTER →
-
-  </Link>
-
-</div>
-
-    </form>
-  </div>
-</div>
-
+              <Link
+                href="/register"
+                className="flex-1 border border-black rounded-full py-2 text-sm text-center hover:bg-black hover:text-white transition"
+                onClick={() => setIsLoginOpen(false)}
+              >
+                REGISTER →
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
     </nav>
   )
 }

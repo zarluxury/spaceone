@@ -39,16 +39,16 @@ const ViewProduct = ({ product }: ViewProductProps) => {
     <>
     <div className="min-h-screen bg-white text-black">
       {/* Main Hero Image */}
-      <div className='relative h-screen w-full'>
-        <Image 
-          src={hero1}
-          alt='Product Hero Image'
-          fill
-          sizes="100vw"
-          className='object-cover'
-          priority
-        />
-      </div>
+      <div className="relative w-full h-screen">
+  <Image 
+    src={hero1}
+    alt="Product Hero Image"
+    fill
+    sizes="100vw"
+    priority
+    className="object-cover"
+  />
+</div>
       {/* Product Info Section */}
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-15 py-16 md:py-15">
         {/* Product Name */}
@@ -251,7 +251,7 @@ const ViewProduct = ({ product }: ViewProductProps) => {
           </p>
         )}
         {section.id === "dimensions" && (
-          <div className="w-full flex justify-center items-center py-16">
+          <div className="w-full flex justify-center items-center py-2">
   <div className="w-[90%] sm:w-[60%] md:w-[40%] lg:w-[28%] ">
     <svg
       viewBox="0 0 200 200"
