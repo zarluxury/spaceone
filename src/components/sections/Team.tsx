@@ -72,7 +72,7 @@ const Team: React.FC = () => {
               fill
               priority
               quality={100}
-              className="object-cover object-top transition-all duration-1000 ease-out group-hover:scale-105 group-hover:brightness-110"
+              className="object-contain object-top transition-all duration-1000 ease-out group-hover:scale-105 group-hover:brightness-110"
             />
             
             {/* Subtle Gradient Overlay: Darker at bottom for text readability, clear at top for the face */}
