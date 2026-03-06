@@ -1,19 +1,40 @@
-import React from 'react';
+'use client'
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Footer } from '../ui/Footer';
 import Image from 'next/image';
-import hero1 from "../../../public/images/product/hero/hero.png"
 
+
+interface Finish {
+  type: string
+  colors: {
+    _id?: string
+    name: string
+    code?: string
+    image: string
+  }[]
+}
 
 interface Product {
-  id: number;
-  name: string;
-  slug: string;
-  edition: string;
-  isNew: boolean;
-  image: string;
-  category: string;
-  subcategory: string;
+  _id: string
+  name: string
+  slug: string
+  description: string
+  designer: string
+  heroImage: string
+  sliderImages: string[]
+  finishes: Finish[]
+  dimensions: {
+    vertical: number
+    horizontal: number
+  }
+  downloads: {
+    title: string
+    file: string
+  }[]
+  category: string
+  createdAt: string
+  updatedAt: string
 }
 
 interface ProductsProps {
@@ -23,90 +44,33 @@ interface ProductsProps {
 }
 
 const Products = (props: ProductsProps) => {
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(false)
+
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch(`${API_BASE}/products`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch products')
+      }
+      const data = await response.json()
+      setProducts(data)
+    } catch (err) {
+      alert('Failed to load products: ' + (err instanceof Error ? err.message : 'An error occurred'))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
   const {
     categories = ['Surfaces'],
-    products = [
-      {
-        id: 1,
-        name: 'Lithe',
-        slug: 'lithe-veneer-edition',
-        edition: 'Veneer Edition',
-        isNew: true,
-        image: hero1.src,
-        category: 'furniture',
-        subcategory: 'coffee-tables',
-      },
-      {
-        id: 2,
-        name: 'Elizabeth Console',
-        slug: 'elizabeth-console',
-        edition: 'Iridium Edition',
-        isNew: true,
-        image: 'https://media.istockphoto.com/id/1989640580/photo/a-technician-is-cutting-luxury-vinyl-floor-tiles-with-a-cutter-to-lay-the-floor-before.jpg?s=2048x2048&w=is&k=20&c=sB--ILudVWFExdvKDQNdNaDko3-7_lCA__pLAESanLw=',
-        category: 'furniture',
-        subcategory: 'console',
-      },
-      {
-        id: 3,
-        name: 'Marea Cabinet',
-        slug: 'marea-cabinet',
-        edition: 'Iridium Edition',
-        isNew: true,
-        image: 'https://cdn.pixabay.com/photo/2016/09/19/17/20/home-1680800_960_720.jpg',
-        category: 'furniture',
-        subcategory: 'cabinets-and-sideboards',
-      },
-      {
-        id: 4,
-        name: 'Pandora',
-        slug: 'pandora',
-        edition: 'Iridium Edition',
-        isNew: true,
-        image: 'https://media.istockphoto.com/id/1456467041/photo/beautiful-kitchen-in-new-farmhouse-style-luxury-home-with-island-pendant-lights-and-hardwood.jpg?s=2048x2048&w=is&k=20&c=rxv8Po-7IeNHSYgmhWBoFn1lN3GuDyRkK-t0CbkWtdY=',
-        category: 'furniture',
-        subcategory: 'dividers',
-      },
-      {
-        id: 5,
-        name: 'Celato',
-        slug: 'celato-iridium-edition',
-        edition: 'Iridium Edition',
-        isNew: true,
-        image: 'https://media.istockphoto.com/id/1398692686/photo/kitchen-and-living-room-interior-in-new-farmhouse-style-luxury-home-with-open-concept-floor.jpg?s=2048x2048&w=is&k=20&c=dsM5Ak5khqVWru8zFmJdf_l2sVxywQHFeRjcYXgwbKM=',
-        category: 'furniture',
-        subcategory: 'cabinets-and-sideboards',
-      },
-      {
-        id: 6,
-        name: 'Elizabeth Console',
-        slug: 'elizabeth-console-2',
-        edition: 'Iridium Edition',
-        isNew: true,
-        image: 'https://media.istockphoto.com/id/1456467041/photo/beautiful-kitchen-in-new-farmhouse-style-luxury-home-with-island-pendant-lights-and-hardwood.jpg?s=2048x2048&w=is&k=20&c=rxv8Po-7IeNHSYgmhWBoFn1lN3GuDyRkK-t0CbkWtdY=',
-        category: 'furniture',
-        subcategory: 'console',
-      },
-      {
-        id: 7,
-        name: 'Marea Cabinet',
-        slug: 'marea-cabinet-2',
-        edition: 'Iridium Edition',
-        isNew: true,
-        image: 'https://media.istockphoto.com/id/1989640580/photo/a-technician-is-cutting-luxury-vinyl-floor-tiles-with-a-cutter-to-lay-the-floor-before.jpg?s=2048x2048&w=is&k=20&c=sB--ILudVWFExdvKDQNdNaDko3-7_lCA__pLAESanLw=',
-        category: 'furniture',
-        subcategory: 'cabinets-and-sideboards',
-      },
-      {
-        id: 8,
-        name: 'Pandora',
-        slug: 'pandora-2',
-        edition: 'Iridium Edition',
-        isNew: true,
-        image: 'https://media.istockphoto.com/id/1398692686/photo/kitchen-and-living-room-interior-in-new-farmhouse-style-luxury-home-with-open-concept-floor.jpg?s=2048x2048&w=is&k=20&c=dsM5Ak5khqVWru8zFmJdf_l2sVxywQHFeRjcYXgwbKM=',
-        category: 'furniture',
-        subcategory: 'dividers',
-      },
-    ],
   } = props;
 
   return (
@@ -127,28 +91,34 @@ const Products = (props: ProductsProps) => {
       </div>
 
       {/* Product Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-[1600px] mx-auto">
-        {products.map((product) => (
-          <Link key={product.id} href={`/productview/${product.slug}`} className="group cursor-pointer">
-            <div className="aspect-[4/5] overflow-hidden bg-[#f5f5f5] mb-4">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-fill transition-transform duration-700 group-hover:scale-105"
-              />
-            </div>
-            <div className="flex items-baseline gap-1 text-[15px] text-[#333] font-gramatika">
-              <span className="font-medium tracking-tight">{product.name} |</span>
-              <span className="text-[#666]">{product.edition}</span>
-              {product.isNew && (
-                <span className="text-[10px] text-blue-500 font-semibold tracking-wider ml-1 uppercase">
-                  NEW
-                </span>
-              )}
-            </div>
-          </Link>
-        ))}
-      </div>
+      {loading ? (
+        <div className="flex justify-center items-center py-20">
+          <div className="text-lg">Loading products...</div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-[1600px] mx-auto">
+          {products.map((product) => (
+            <Link key={product._id} href={`/productview/${product.slug}`} className="group cursor-pointer">
+              <div className="aspect-[4/5] overflow-hidden bg-[#f5f5f5] mb-4">
+                <img
+                  src={product.heroImage}
+                  alt={product.name}
+                  className="w-full h-full object-fill transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+              <div className="flex items-baseline gap-1 text-[15px] text-[#333] font-gramatika">
+                <span className="font-medium tracking-tight">{product.name}</span>
+                <span className="text-[#666]">| {product.designer}</span>
+                {product.finishes.length > 0 && (
+                  <span className="text-[10px] text-blue-500 font-semibold tracking-wider ml-1 uppercase">
+                    {product.finishes[0].type}
+                  </span>
+                )}
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
     <Footer />
     </>

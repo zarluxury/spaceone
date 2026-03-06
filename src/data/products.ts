@@ -5,7 +5,6 @@ export interface Product {
   category: string
   subcategory: string
   description: string
-  details: string
   designer: string
   heroImage: string
   sliderImages: string[]
@@ -39,8 +38,7 @@ export const products: Product[] = [
     slug: 'lithe-veneer-edition',
     category: 'furniture',
     subcategory: 'tables',
-    description: 'Imagine the luxurious look and feel of faux leather combined with the durability and affordability of laminate. Introducing our revolutionary leather laminate! It has a realistic leather texture, stain resistance, water repellency and ease of maintenance.',
-    details: 'We offer the look and feel of real leather without the associated high cost and maintenance. With a wide range of 45 varieties, it is popularly used in wardrobe internals, wall paneling, shutters etc.',
+    description: 'Imagine the luxurious look and feel of faux leather combined with the durability and affordability of laminate. Introducing our revolutionary leather laminate! It has a realistic leather texture, stain resistance, water repellency and ease of maintenance. We offer the look and feel of real leather without the associated high cost and maintenance. With a wide range of 45 varieties, it is popularly used in wardrobe internals, wall paneling, shutters etc.',
     designer: 'R&D SpaceOne',
     heroImage: '/images/product/hero/hero.png',
     sliderImages: [
@@ -81,7 +79,6 @@ export const products: Product[] = [
     category: 'furniture',
     subcategory: 'chairs',
     description: 'Celesto is a reference to what is concealed to keep a memory intact; it\'s an archetype in which beauty is revealed in stages. A monolithic appearance makes Celato a contemporary memoir, like a legend that tells of magnificent treasures safeguarded below sacred stones.',
-    details: 'At Milan Design Week 2023, De Castelli presents Iridium Edition: a selection of the brand\'s iconic furniture which fully expresses its aesthetic. The unique cobalt blue lacquer on the inside combined with the new Delirium finish transforms each piece into a presence with intense, vibrant character.',
     designer: 'R&D De Castelli',
     heroImage: '/images/product/hero/hero.png',
     sliderImages: [

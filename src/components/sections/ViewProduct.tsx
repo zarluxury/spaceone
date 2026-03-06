@@ -1,32 +1,126 @@
 'use client'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { CiCirclePlus } from "react-icons/ci";
-import hero1 from "../../../public/images/product/hero/hero.png"
-import slider1 from "../../../public/images/product/slider/1.png"
-import slider2 from "../../../public/images/product/slider/2.png"
-import slider3 from "../../../public/images/product/slider/3.png"
-
-
+import { useParams } from 'next/navigation'
 import { Footer } from '../ui/Footer'
 import Link from 'next/link';
-import { Product } from '@/data/products'
 
-interface ViewProductProps {
-  product: Product
+interface Finish {
+  type: string
+  colors: {
+    _id?: string
+    name: string
+    code?: string
+    image: string
+  }[]
 }
 
-const ViewProduct = ({ product }: ViewProductProps) => {
+interface Product {
+  _id: string
+  name: string
+  slug: string
+  description: string
+  designer: string
+  heroImage: string
+  sliderImages: string[]
+  finishes: Finish[]
+  dimensions: {
+    vertical: number
+    horizontal: number
+  }
+  downloads: {
+    title: string
+    file: string
+  }[]
+  category: string
+  createdAt: string
+  updatedAt: string
+}
+
+interface Color {
+  name: string
+  image: string
+  category: 'classic' | 'plate' | 'weave'
+}
+
+interface SuggestProduct {
+  src: string
+  name: string
+}
+
+interface ViewProductProps {
+  slug: string
+}
+
+const ViewProduct = ({ slug }: ViewProductProps) => {
+  const [product, setProduct] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   const [selectedColor, setSelectedColor] = useState(0)
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const [openSection, setOpenSection] = useState("")
   const [activeColorCategory, setActiveColorCategory] = useState("classic")
 
-  // Use product data from props
-  const sliderImages = [slider1, slider2, slider3]
-  const colors = product.colors
-  const suggestProduct = product.suggestProduct
+
+  const fetchProduct = async () => {
+    try {
+      setLoading(true)
+     const response = await fetch(`http://localhost:5000/api/products/${slug}`)
+
+if (!response.ok) {
+  throw new Error('Product not found')
+}
+
+const data = await response.json()
+setProduct(data)
+console.log('Product loaded:', data)
+
+      
+    } catch (err) {
+      alert('Failed to load product: ' + (err instanceof Error ? err.message : 'An error occurred'))
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    if (slug) {
+      fetchProduct()
+    }
+
+  }, [slug])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-lg">Loading product...</div>
+      </div>
+    )
+  }
+
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-lg">Product not found</div>
+      </div>
+    )
+  }
+
+  // Transform finishes data to colors format
+  const colors: Color[] = product.finishes?.flatMap((finish: Finish) => 
+    finish.colors?.map((color: { _id?: string, name: string, code?: string, image: string }) => ({
+      name: color.name,
+      image: color.image,
+      category: finish.type?.toLowerCase() as 'classic' | 'plate' | 'weave'
+    }))
+  ) || []
+
+  // Use product slider images or fallback
+  const sliderImages = product.sliderImages?.length > 0 ? product.sliderImages : [product.heroImage]
+  
+  // Use suggest products from API or fallback
+  const suggestProduct = product.suggestProduct || []
 
   const nextSlide = () => {
     setCurrentSlide((prev: number) => (prev + 1) % sliderImages.length)
@@ -41,7 +135,7 @@ const ViewProduct = ({ product }: ViewProductProps) => {
       {/* Main Hero Image */}
       <div className="relative w-full h-screen">
   <Image 
-    src={hero1}
+    src={product.heroImage}
     alt="Product Hero Image"
     fill
     sizes="100vw"
@@ -62,13 +156,11 @@ const ViewProduct = ({ product }: ViewProductProps) => {
     <p className="text-[19px] text-gray-700 ">
       {product.description}
     </p>
-    <p className="text-[19px] text-gray-700">
-       {product.details}
-    </p>
+
   </div>
   {/* SIDE META */}
   <div className="flex items-start lg:justify-center font-gramatika">
-    <p className="text-[16px] text-gray-900 uppercase tracking-wider">
+    <p className="text-[16px] text-gray-900 capitalize tracking-wider">
       <span className="text-[12px] relative -top-2 mr-2 text-gray-600">DESIGN</span>
       {product.designer}
     </p>
@@ -96,7 +188,7 @@ const ViewProduct = ({ product }: ViewProductProps) => {
         transform: `translateX(-${currentSlide * 100}%)`,
       }}
     >
-      {sliderImages.map((img, index) => (
+      {sliderImages.map((img: any, index: number) => (
         <div
           key={index}
           className="min-w-full flex items-center justify-center"
@@ -173,8 +265,8 @@ const ViewProduct = ({ product }: ViewProductProps) => {
             <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-16 mb-1 transition-all duration-500 ${
               activeColorCategory === 'classic' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden mb-0'
             }`}>
-              {colors.filter(color => color.category === 'classic').map((color, index) => (
-                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
+              {colors.filter((color: any) => color.category === 'classic').map((color: any, index: number) => (
+                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.name} className="group cursor-pointer">
                   <div className="relative w-full aspect-square overflow-hidden">
                     <Image
                       src={color.image}
@@ -200,8 +292,8 @@ const ViewProduct = ({ product }: ViewProductProps) => {
             <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-16 mb-1 transition-all duration-500 ${
               activeColorCategory === 'plate' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden mb-0'
             }`}>
-              {colors.filter(color => color.category === 'plate').map((color, index) => (
-                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
+              {colors.filter((color: any) => color.category === 'plate').map((color: any, index: number) => (
+                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.name} className="group cursor-pointer">
                   <div className="relative w-full aspect-square overflow-hidden">
                     <Image
                       src={color.image}
@@ -227,8 +319,8 @@ const ViewProduct = ({ product }: ViewProductProps) => {
             <div className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-16 mb-1 transition-all duration-500 ${
               activeColorCategory === 'weave' ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden'
             }`}>
-              {colors.filter(color => color.category === 'weave').map((color, index) => (
-                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.id} className="group cursor-pointer">
+              {colors.filter((color: any) => color.category === 'weave').map((color: any, index: number) => (
+                <Link href={`/finishes/${color.name.replace(/\s+/g, '-')}`} key={color.name} className="group cursor-pointer">
                   <div className="relative w-full aspect-square overflow-hidden">
                     <Image
                       src={color.image}
@@ -249,7 +341,7 @@ const ViewProduct = ({ product }: ViewProductProps) => {
             Brass, copper, patinated metals and custom finishes available.
           </p>
         )}
-        {section.id === "dimensions" && (
+        {section.id === "dimensions" && product?.dimensions && (
           <div className="w-full flex justify-center items-center py-2">
   <div className="w-[90%] sm:w-[60%] md:w-[40%] lg:w-[28%] ">
     <svg
@@ -271,7 +363,7 @@ const ViewProduct = ({ product }: ViewProductProps) => {
         fill="#3b82f6"
         stroke="none"
       >
-        30
+        {product.dimensions.horizontal}
       </text>
       {/* ===== LEFT HEIGHT LINE ===== */}
       <line x1="25" y1="40" x2="25" y2="160" />
@@ -284,7 +376,7 @@ const ViewProduct = ({ product }: ViewProductProps) => {
         fill="#3b82f6"
         stroke="none"
       >
-        30
+        {product.dimensions.vertical}
       </text>
     </svg>
   </div>
@@ -292,9 +384,17 @@ const ViewProduct = ({ product }: ViewProductProps) => {
         )}
         {section.id === "downloads" && (
           <div className="flex flex-col gap-4 text-lg">
-            <a className="underline hover:text-blue-600 cursor-pointer">Product Sheet PDF</a>
-            <a className="underline hover:text-blue-600 cursor-pointer">3D Model</a>
-            <a className="underline hover:text-blue-600 cursor-pointer">Technical Drawings</a>
+            {product.downloads?.map((download: any, index: number) => (
+              <a 
+                key={index}
+                href={download.file} 
+                className="underline hover:text-blue-600 cursor-pointer"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {download.title}
+              </a>
+            ))}
           </div>
         )}
       </div>
@@ -304,11 +404,11 @@ const ViewProduct = ({ product }: ViewProductProps) => {
 </div>
         {/* Affinities with this product */}
 <div className="w-full min-h-screen flex flex-col">
-  <h2 className="text-4xl font-gramatika font-[100] text-center py-16">
+  <h2 className="text-4xl font-gramatika font-thin text-center py-16">
     Affinities with this product
   </h2>
   <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[80vh]">
-    {suggestProduct.map((n, index) => (
+    {suggestProduct.map((n: any, index: number) => (
       <Link href={`/finishes/${n.name}`} key={index}>
       <div key={index} className="relative w-full h-full overflow-hidden group cursor-pointer">
         <Image

@@ -1,157 +1,222 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { GoDownload } from "react-icons/go";
 import bottomImg from '../../../public/data/Materioteca-footer.jpeg'
 import { Footer } from '../ui/Footer';
-import { getColorByName, getColorsByCategory } from '@/data/products';
 import Link from 'next/link';
+
+interface Finish {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  finishType: string;
+  type: string;
+  colorName: string;
+  colorImage: string;
+}
 
 interface FinishesProps {
   finishName?: string
 }
 
 const Finishes = ({ finishName }: FinishesProps) => {
-  // Get color data if finishName is provided
-  const selectedColor = finishName ? getColorByName(finishName) : null;
-  const categoryColors = selectedColor ? getColorsByCategory(selectedColor.category) : [];
-  
-  // Use category colors if we have a selected color, otherwise use default affinity images
-  const displayColors = categoryColors.length > 0 ? categoryColors.slice(0, 3) : [];
-  
-  // Generate color images using actual image paths from products data
-  const colorImages = displayColors.map(color => ({
-    src: color.image,
-    name: color.name
+  const [allFinishes, setAllFinishes] = useState<Finish[]>([]);
+  const [selectedFinish, setSelectedFinish] = useState<Finish | null>(null);
+  const [relatedFinishes, setRelatedFinishes] = useState<Finish[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // API functions
+  const getAllFinishes = async (): Promise<Finish[]> => {
+    try {
+      const response = await fetch('http://localhost:5000/api/products/finishes');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch finishes');
+      }
+      
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error fetching finishes:', error);
+      throw error;
+    }
+  };
+
+  const getFinishByName = async (finishName: string): Promise<Finish | null> => {
+    try {
+      const finishes = await getAllFinishes();
+      const normalizedName = finishName.replace(/-/g, ' ').toLowerCase().trim();
+      
+      // Try exact match first
+      let foundFinish = finishes.find(finish => {
+        const finishNormalizedName = finish.colorName.replace(/\s+/g, ' ').toLowerCase().trim();
+        return finishNormalizedName === normalizedName;
+      });
+      
+      // If no exact match, try partial match
+      if (!foundFinish) {
+        const searchTerms = normalizedName.split(' ');
+        foundFinish = finishes.find(finish => {
+          const finishNormalizedName = finish.colorName.toLowerCase();
+          return searchTerms.every(term => finishNormalizedName.includes(term));
+        });
+      }
+      
+      return foundFinish || null;
+    } catch (error) {
+      console.error('Error finding finish by name:', error);
+      return null;
+    }
+  };
+
+  const getRelatedFinishes = async (currentFinish: Finish): Promise<Finish[]> => {
+    try {
+      const finishes = await getAllFinishes();
+      return finishes.filter(finish => 
+        finish.productId !== currentFinish.productId && 
+        finish.type === currentFinish.type
+      ).slice(0, 3);
+    } catch (error) {
+      console.error('Error getting related finishes:', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const finishes = await getAllFinishes();
+        setAllFinishes(finishes);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [finishName]);
+
+  // Generate display images from all finishes
+  const displayImages = allFinishes.map(finish => ({
+    src: finish.colorImage,
+    name: finish.colorName
   }));
 
-  const handleDownload = async (url: string, name: string) => {
-  try {
-    const response = await fetch(url);
-    const blob = await response.blob();
-
-    const blobUrl = window.URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = blobUrl;
-    a.download = `${name}.jpg`;
-    document.body.appendChild(a);
-    a.click();
-
-    a.remove();
-    window.URL.revokeObjectURL(blobUrl);
-  } catch (err) {
-    console.error("Download failed", err);
-  }
-};
-useEffect(()=>{
- window.scrollTo({
-    top:0,
-    behavior:'smooth'
- })
-},[])
-  
-  return (
-    <div className="w-full h-screen bg-gray-50">
-        
-        <div className="flex flex-col items-center justify-center text-center h-100 px-6 space-y-10">
-  <h2 className="text-5xl font-gramatika text-gray-500">
-    {selectedColor ? selectedColor.name : 'Striped DeLabré'}
-  </h2>
-
-  <p className="max-w-3xl text-gray-700 tracking-wider font-gramatika">
-    {selectedColor 
-      ? `Explore the ${selectedColor.category} color collection. This ${selectedColor.name} finish is part of our premium color palette, offering exceptional quality and aesthetic appeal for your design projects.`
-      : 'Handcrafted finishing designed and developed by SpaceOne for indoor and outdoor use. A first oxidation of the material is followed by manual brushing to create the "streaked" effect. Subsequently it is lacquered with a protective, transparent varnish.'
+  // Group finishes by type
+  const groupedFinishes = allFinishes.reduce((acc, finish) => {
+    const type = finish.type || 'other';
+    if (!acc[type]) {
+      acc[type] = [];
     }
-  </p>
-</div>
+    acc[type].push(finish);
+    return acc;
+  }, {} as Record<string, Finish[]>);
 
+  const handleDownload = async (url: string, name: string) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
 
-  <div className="grid grid-cols-1 md:grid-cols-3 w-full h-[80vh] py-12 px-12 gap-5">
-    {colorImages.map((n: { src: string; name: string }, index: number) => (
-<div key={index} className="flex flex-col w-full h-full group cursor-pointer">
+      const blobUrl = window.URL.createObjectURL(blob);
 
-  {/* Image */}
-  <div className="relative flex-1 overflow-hidden">
-    <Image
-      src={n.src}
-      alt={`Color ${index + 1}`}
-      fill
-      priority
-      className="
-        object-cover
-        transition-transform duration-700
-        group-hover:scale-105
-      "
-    />
-  </div>
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `${name}.jpg`;
+      document.body.appendChild(a);
+      a.click();
 
-  {/* Bottom row (text + icon) */}
-  <div className="flex items-center justify-between mt-3">
-    <h2 className="text-black font-light font-gramatika text-2xl tracking-wide">
-      {n.name}
-    </h2>
+      a.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error("Download failed", err);
+    }
+  };
 
-    <GoDownload
-  onClick={(e) => {
-    e.stopPropagation(); // prevents parent click issues
-    handleDownload(n.src, n.name);
-  }}
-  className="text-2xl hover:scale-110 transition cursor-pointer"
-/>
+  useEffect(()=>{
+    window.scrollTo({
+      top:0,
+      behavior:'smooth'
+    })
+  },[])
 
-  </div>
+  if (loading) {
+    return (
+      <div className="w-full h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-lg">Loading finish data...</div>
+      </div>
+    );
+  }
 
-</div>
+  // Always show all finishes grouped by type
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <div className="text-center py-16 px-6">
+        <h1 className="text-5xl font-gramatika text-gray-900 mb-6">
+          Metal Finishes
+        </h1>
+        <p className="max-w-3xl mx-auto text-gray-700 text-lg font-gramatika tracking-wide">
+          Explore our complete collection of premium metal finishes. Each finish is carefully crafted 
+          to provide exceptional quality and aesthetic appeal for your design projects.
+        </p>
+      </div>
 
-    ))}
-  </div>
+      {/* Finishes Grid by Type */}
+      <div className="px-6 md:px-16 pb-16">
+        {Object.entries(groupedFinishes).map(([type, typeFinishes]) => (
+          <div key={type} className="mb-16">
+            <h2 className="text-3xl font-gramatika text-gray-800 mb-8 capitalize">
+              {type} Finishes ({typeFinishes.length})
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {typeFinishes.map((finish, index) => (
+                <Link 
+                  href={`/finishes/${finish.colorName.replace(/\s+/g, '-')}`} 
+                  key={`${finish.productId}-${finish.colorName}-${index}`}
+                  className="group cursor-pointer"
+                >
+                  <div className="relative aspect-square overflow-hidden rounded-lg mb-4">
+                    <Image
+                      src={finish.colorImage}
+                      alt={finish.colorName}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      className="object-cover group-hover:scale-105 transition duration-500"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-gramatika text-gray-900 group-hover:text-blue-600 transition-colors">
+                        {finish.colorName}
+                      </h3>
+                      <GoDownload
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDownload(finish.colorImage, finish.colorName);
+                        }}
+                        className="text-xl hover:scale-110 transition cursor-pointer text-gray-600 hover:text-black"
+                      />
+                    </div>
+                    <p className="text-sm text-gray-600 font-gramatika">
+                      {finish.productName}
+                    </p>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">
+                      {finish.finishType}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
 
-
- {/* ===== Final Hero Section ===== */}
-<div className="w-full bg-gray-200 min-h-auto grid grid-cols-1 md:grid-cols-2">
-
-  {/* Left Content */}
-  <div className="flex items-start px-6 md:px-20 py-16">
-    <div className="space-y-6 max-w-lg">
-      <h2 className="font-gramatika text-3xl md:text-4xl text-black">
-        Metal Finishes
-      </h2>
-
-      <p className="text-gray-600 text-base md:text-lg leading-relaxed font-gramatika">
-        The complete collection of SpaceOne metal finishes.
-      </p>
-
-      <Link href="/contact-us" className="
-        border border-black
-        px-6 py-2
-        rounded-full
-        text-sm tracking-wide
-        hover:bg-black hover:text-white
-        transition cursor-pointer
-      ">
-        CONTACT US
-      </Link>
+      <Footer />
     </div>
-  </div>
-
-  {/* Right Image (full height) */}
-  <div className="relative w-full h-[40vh] md:h-[70vh]">
-    <Image
-      src={bottomImg}
-      alt="Metal finishes"
-      fill
-      priority
-      className="object-cover"
-    />
-  </div>
-
-</div>
-
-<Footer/>
-    </div>
-  )
+  );
 }
 
 export default Finishes
