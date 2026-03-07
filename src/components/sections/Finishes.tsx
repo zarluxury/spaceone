@@ -177,15 +177,15 @@ const Finishes = ({ finishName }: FinishesProps) => {
                   key={`${finish.productId}-${finish.colorName}-${index}`}
                   className="group cursor-pointer"
                 >
-                  <div className="relative aspect-square overflow-hidden rounded-lg mb-4">
-                    <Image
-                      src={finish.colorImage}
-                      alt={finish.colorName}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                      className="object-cover group-hover:scale-105 transition duration-500"
-                    />
-                  </div>
+                  <div className="relative aspect-square overflow-hidden rounded-lg mb-4 group">
+  <Image
+    src={finish.colorImage}
+    alt={finish.colorName}
+    fill
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+    className="object-cover transition-transform duration-500 group-hover:scale-[5]"
+  />
+</div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-gramatika text-gray-900 group-hover:text-blue-600 transition-colors">
