@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { GoDownload } from "react-icons/go";
+import { X } from 'lucide-react';
 import bottomImg from '../../../public/data/Materioteca-footer.jpeg'
 import { Footer } from '../ui/Footer';
 import { DownloadForm } from '../ui/DownloadForm';
+import { QRCodeComponent } from '../ui/QRCode';
 import Link from 'next/link';
 
 interface Finish {
@@ -153,20 +155,7 @@ const Finishes = ({ finishName, productId }: FinishesProps) => {
     const email = localStorage.getItem('userEmail');
     if (email && downloadedImages.has(url)) {
       // Direct download if already submitted form
-      try {
-        const response = await fetch(url);
-        const blob = await response.blob();
-        const blobUrl = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = blobUrl;
-        a.download = `${name}.jpg`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(blobUrl);
-      } catch (err) {
-        console.error('Download failed:', err);
-      }
+      await handleDirectDownload(url, name);
       return;
     }
 
@@ -235,19 +224,69 @@ const Finishes = ({ finishName, productId }: FinishesProps) => {
 
   const handleDirectDownload = async (url: string, name: string) => {
     try {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const blobUrl = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = blobUrl;
-      a.download = `${name}.jpg`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      window.URL.revokeObjectURL(blobUrl);
+      // Create a temporary link and trigger download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${name}.jpg`;
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Fallback: open in new tab if download doesn't work
+      setTimeout(() => {
+        window.open(url, '_blank');
+      }, 1000);
     } catch (err) {
       console.error('Download failed:', err);
+      // Final fallback: open in new tab
+      window.open(url, '_blank');
     }
+  };
+
+  const handleQRCodeDownload = async (finish: Finish) => {
+    try {
+      // Get the QR code canvas element
+      const qrCanvas = document.querySelector(`#qr-${finish.productId}-${finish.colorName.replace(/\s+/g, '-')} canvas`) as HTMLCanvasElement;
+      
+      if (qrCanvas) {
+        // Convert canvas to blob and download
+        qrCanvas.toBlob((blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `QR-${finish.colorName.replace(/\s+/g, '-')}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          }
+        });
+      }
+    } catch (error) {
+      console.error('QR code download failed:', error);
+    }
+  };
+
+  const generateQRCodeData = (finish: Finish): string => {
+    // Create a simple data structure with just the essential IDs
+    const qrData = {
+      id: finish.productId,
+      color: finish.colorName.replace(/\s+/g, '-').toLowerCase()
+    };
+    // Encode as URL-safe base64
+    return btoa(JSON.stringify(qrData))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+  };
+
+  const getQRCodeUrl = (finish: Finish): string => {
+    // Use environment variable or fallback to current window location
+    const baseUrl = process.env.NEXT_PUBLIC_FRONTEND_URL || 
+      (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+    return `${baseUrl}/qr/${generateQRCodeData(finish)}`;
   };
 
   useEffect(() => {
@@ -384,47 +423,83 @@ const Finishes = ({ finishName, productId }: FinishesProps) => {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {typeFinishes.map((finish, index) => (
-                <Link
-                  href={`/finishes/${finish.colorName.replace(/\s+/g, '-')}`}
-                  key={`${finish.productId}-${finish.colorName}-${index}`}
-                  className="group cursor-pointer"
-                >
-                  <div className="w-full mb-4">
-                    <Image
-                      src={finish.colorImage}
-                      alt={finish.colorName}
-                      width={500}
-                      height={500}
-                      className="w-full h-auto object-contain rounded-lg"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleDownload(finish.colorImage, finish.colorName, finish.productId, finish.productName);
-                      }}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-gramatika text-gray-900 group-hover:text-blue-600 transition-colors">
-                        {finish.colorName}
-                      </h3>
-                      <GoDownload
+                <div key={`${finish.productId}-${finish.colorName}-${index}`} className="group">
+                  <Link
+                    href={`/finishes/${finish.colorName.replace(/\s+/g, '-')}`}
+                    className="block"
+                  >
+                    <div className="w-full mb-4">
+                      <Image
+                        src={finish.colorImage}
+                        alt={finish.colorName}
+                        width={500}
+                        height={500}
+                        className="w-full h-auto object-contain rounded-lg"
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           handleDownload(finish.colorImage, finish.colorName, finish.productId, finish.productName);
                         }}
-                        className="text-xl hover:scale-110 transition cursor-pointer text-gray-600 hover:text-black"
                       />
                     </div>
-                    <p className="text-sm text-gray-600 font-gramatika">
-                      {finish.productName}
-                    </p>
-                    <p className="text-xs text-gray-500 uppercase tracking-wide">
-                      {finish.finishType}
-                    </p>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-gramatika text-gray-900 group-hover:text-blue-600 transition-colors">
+                          {finish.colorName}
+                        </h3>
+                        <GoDownload
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleDownload(finish.colorImage, finish.colorName, finish.productId, finish.productName);
+                          }}
+                          className="text-xl hover:scale-110 transition cursor-pointer text-gray-600 hover:text-black"
+                        />
+                      </div>
+                      <p className="text-sm text-gray-600 font-gramatika">
+                        {finish.productName}
+                      </p>
+                      <p className="text-xs text-gray-500 uppercase tracking-wide">
+                        {finish.finishType}
+                      </p>
+                    </div>
+                  </Link>
+                  
+                  {/* QR Code Section */}
+                  <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                    <div className="text-center">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs text-gray-600 font-medium">Scan to Download</p>
+                        <GoDownload
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleQRCodeDownload(finish);
+                          }}
+                          className="text-sm hover:scale-110 transition cursor-pointer text-gray-600 hover:text-black"
+                          title="Download QR Code"
+                        />
+                      </div>
+                      <div className="flex justify-center">
+                        <Link href={`/qr/${generateQRCodeData(finish)}`} target="_blank">
+                          <QRCodeComponent 
+                            data={getQRCodeUrl(finish)}
+                            size={100}
+                            className="hover:opacity-80 transition-opacity cursor-pointer"
+                            id={`qr-${finish.productId}-${finish.colorName.replace(/\s+/g, '-')}`}
+                          />
+                        </Link>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2">
+                        Scan QR code for instant download
+                      </p>
+                      {/* Debug: Show the URL (remove in production) */}
+                      {/* <p className="text-xs text-gray-400 mt-1 break-all">
+                        {getQRCodeUrl(finish)}
+                      </p> */}
+                    </div>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>

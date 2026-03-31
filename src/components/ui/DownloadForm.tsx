@@ -193,28 +193,34 @@ export const DownloadForm: React.FC<DownloadFormProps> = ({
           </div>
 
           {/* Phone */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              <Phone className="w-4 h-4" />
-              Phone Number *
-            </label>
-            <PhoneInput
-              country={'in'}
-              enableSearch={true}
-              value={formData.phone}
-              onChange={(phone: string) => handlePhoneChange(phone)}
-              placeholder="Enter phone number"
-              inputClass={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.phone ? 'border-red-500' : 'border-gray-300'
-              }`}
-              containerClass="w-full"
-              buttonClass="bg-gray-50 border-gray-300 rounded-l-lg"
-              dropdownClass="bg-white border border-gray-300 rounded-lg shadow-lg"
-            />
-            {errors.phone && (
-              <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
-            )}
-          </div>
+          <div className="w-full">
+  <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+    <Phone className="w-4 h-4" />
+    Phone Number *
+  </label>
+
+  <PhoneInput
+    country={'in'}
+    enableSearch={true}
+    value={formData.phone}
+    onChange={(phone: string) => handlePhoneChange(phone)}
+    placeholder="Enter phone number"
+
+    containerClass="w-full"
+
+    inputClass={`!w-full !h-11 !pl-14 !pr-4 !text-sm !border !rounded-lg !focus:outline-none !focus:ring-2 !focus:ring-blue-500 ${
+      errors.phone ? '!border-red-500' : '!border-gray-300'
+    }`}
+
+    buttonClass="!border-gray-300 !rounded-l-lg !bg-gray-50"
+
+    dropdownClass="!bg-white !border !border-gray-300 !rounded-lg !shadow-lg"
+  />
+
+  {errors.phone && (
+    <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+  )}
+</div>
 
           {/* Profile */}
           <div>
@@ -297,3 +303,5 @@ export const DownloadForm: React.FC<DownloadFormProps> = ({
     </div>
   )
 }
+
+export default DownloadForm
